@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*sign up buttons*/
+body{
+  background-color: #F9F7F7;
+}
+.hh{
+  letter-spacing: 2px;
+}
+.enabled-button {
+  background-color: #FF6F61; 
+  color: #F9F7F7;
+  cursor: pointer; 
+}
+.enabled-button:hover{
+  background-color: #C7A500
+}
+
+.disabled-button {
+  background-color: #cccccc;
+  color: #999999;
+  cursor: not-allowed;
+  
+}
+
+.landing-bg {
+  background-image:linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.55) 0%), url('/landingbg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.li{
+  letter-spacing: 0.2rem;
+}
+.li::before{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #F9F7F7;
+  bottom: -2px;
+  transform: scaleX(0);
+  transition: transform 0.5s ease-in-out;
+  transform-origin: right;
+
+}
+.mob::before{
+  background: #004D40;
+}
+.li:hover::before{
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+
+.searchbox{
+  padding: 0 30px;
+  transition: 0.5s ease-in-out;
+  right: -100%;
+}
+.searchbox input{
+  font-size: 15px;
+  background-color: #004D40;
+  border-bottom: 1px solid #F9F7F7;
+  color: #F9F7F7;
+}
+
+
+/*sign in*/
