@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import {  Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,11 @@ import {faMagnifyingGlass, faHandshake, faChartLine} from '@fortawesome/free-sol
 //import Navbar from "./components/Navbar";
 
 
-const inter = Inter({ subsets: ["latin"] });
+const inter =  Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
 
 export const metadata: Metadata = {
   title: "Volunta",

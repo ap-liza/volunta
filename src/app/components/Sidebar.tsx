@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import Link from 'next/link'
@@ -56,14 +57,17 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         }
     }
     
-    //get user's name
+    //get user's details
     const [userName, setUserName] = useState('')
-    const getUserName = async () => {
+    const [profilePicture, setProfilePicture] = useState('')
+    
+    const getUserDetails = async () => {
         try {
             const res = await axios.get('/api/users/user1')
             console.log(res.data)
-            const { _id, username } = res.data.data
+            const { _id, username, profilePicture } = res.data.data
             setUserName(res.data.data.firstName)
+            setProfilePicture((profilePicture || 'profile-default.png'))
         } catch (error: any) {
             console.error('Failed to fetch user details:', error.message)
             toast.error('Failed to load user details')
@@ -71,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     }
 
     useEffect(() => {
-        getUserName() // Fetch user details on component mount
+        getUserDetails() // Fetch user details on component mount
     }, [])
 
 
@@ -93,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           {/**IMAGE */}
           <div>
             <img
-              src="/v2.jpg"
+              src={profilePicture}
               alt="profile"
               className="w-[50px] h-[50px] overflow-hidden rounded-full shadow-lg"
             />
