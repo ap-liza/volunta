@@ -120,7 +120,8 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
 {/**profile picture and bio */}
     <div className="flex justify-center items-center gap-4">
-
+    
+    <div className="flex flex-col">
         {/**profile picture*/}
 
         <div className="relative">
@@ -150,8 +151,18 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             accept="image/*"
             onChange={handleFileChange}
             />
-
+        
         </div>
+
+        {/**upload button */}
+        <button
+           onClick={handleUpload}
+            className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 mt-2"
+        >
+            Upload picture
+        </button>
+
+    </div>   
         {/**name, location and bio */}
         <div className="flex flex-col gap-2">
                 <h1 
@@ -168,23 +179,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </div>
     </div>
 {/**edit profile picture */}
-    <div>
-{/**pen for editing picture */}
-        <div className="flex bg-[#FF6F61] text-[#F9F7F7] hover:bg-[#C7A500] cursor-pointer px-2 py-2 w-10 h-10 rounded-full">
-            
-            <svg className="w-6 h-6 text-[#F9F7F7] " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12.293 2.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.707.293H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l9-9z" />
-            <path d="M6 14a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H6z" />
-            </svg>
-        </div>
-
-
-        
-{/**upload picture*/}
-        <div className="flex bg-blue-500 text-[#F9F7F7] hover:bg-blue-300 cursor-pointer px-4 py-2 rounded-full">
-            Upload photo
-        </div>
-    </div>
+   
         
 </div>
 
