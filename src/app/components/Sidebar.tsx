@@ -5,7 +5,7 @@ import Link from 'next/link'
 import React, { ReactNode, useState, useEffect } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 interface SidebarProps {
   children: ReactNode;
@@ -14,11 +14,11 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     //router to push user to log in after logging out
     const router = useRouter()
+   
     
     //visibility of the side content
     const [isContentVisible, setIsContentVisible] = useState<boolean>(true);
-
-
+    
     const toggleContentVisibility = () => {
         setIsContentVisible((prevState) => !prevState);
     };
@@ -65,8 +65,8 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         try {
             const res = await axios.get('/api/users/user1')
             console.log(res.data)
-            const { _id, username, profilePicture } = res.data.data
-            setUserName(res.data.data.firstName)
+            const { firstName, profilePicture } = res.data.data
+            setUserName(firstName)
             setProfilePicture((profilePicture || 'profile-default.png'))
         } catch (error: any) {
             console.error('Failed to fetch user details:', error.message)
@@ -78,6 +78,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         getUserDetails() // Fetch user details on component mount
     }, [])
 
+  // Highlight LINKS based on current path
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    return pathname === path ? 'bg-[#F9F7F7] text-[#004D40]' : '';
+  }
 
 
   return (
@@ -111,9 +117,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           <ul className="flex flex-col gap-[20px]">
             
             {/**uPCOMING EVENTS events */}
-            <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px]  md:p-[10px] gap-[12px]">
+            <li 
+            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${isActive(userId ? `/events/${userId}` : '/events')}`}>
               {/**icon */}
-              <Link href='/'>
+              <Link 
+               href={userId ? `/events/${userId}` : '/profile'}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -131,12 +140,13 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </Link>
 
               <Link 
-              href="/"
+               href={userId ? `/events/${userId}` : '/profile'}
               className='hidden md:block'
               >Upcoming Events
               </Link>
             </li>
 
+            {/**Post a new event */}
             <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
               {/**icon */}
               <button>
@@ -157,13 +167,15 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </button>
 
               <Link 
-              href="/"
+              href='/'
+              
               className='hidden md:block'
               >
                 Post a New Event
               </Link>
             </li>
 
+            {/**Activity */}
             <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
               {/**icon */}
               <button>
@@ -188,7 +200,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               >Activity</Link>
             </li>
 
-            <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
+            {/**Account */}
+            <li 
+            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] hover:bg-[#F9F7F7] hover:text-[#004D40]
+            ${isActive(userId ? `/profile/${userId}`: '/profile')} `}>
               {/**icon */}
 
               <Link href={userId ? `/profile/${userId}` : '/profile'}>
