@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
-    return pathname === path ? 'bg-[#F9F7F7] text-[#004D40]' : '';
+    return pathname === path ? 'bg-[#F9F7F7] text-[#00332E]' : '';
   }
 
 
@@ -118,10 +118,13 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             
             {/**uPCOMING EVENTS events */}
             <li 
-            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${isActive(userId ? `/events/${userId}` : '/events')}`}>
+            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
+              isActive(userId ? `/events/${userId}` : '/events') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+            } text-[#F9F7F7]`}
+             >
               {/**icon */}
               <Link 
-               href={userId ? `/events/${userId}` : '/profile'}
+               href={userId ? `/events/${userId}` : '/events'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -147,9 +150,17 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </li>
 
             {/**Post a new event */}
-            <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
+            <li 
+             className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
+              isActive(userId ? `/newevents/${userId}` : '/newevents') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+            } text-[#F9F7F7]`}
+            >
+              
+              
               {/**icon */}
-              <button>
+              <Link
+               href={userId ? `/newevents/${userId}` : '/newevents'}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -164,10 +175,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     d="M12 4.5v15m7.5-7.5h-15"
                   />
                 </svg>
-              </button>
+              </Link>
 
               <Link 
-              href='/'
+               href={userId ? `/newevents/${userId}` : '/newevents'}
               
               className='hidden md:block'
               >
@@ -176,9 +187,16 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </li>
 
             {/**Activity */}
-            <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
+            <li 
+            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
+              isActive(userId ? `/activity/${userId}` : '/activity') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+            } text-[#F9F7F7]`}
+            >
+
               {/**icon */}
-              <button>
+              <Link
+               href={userId ? `/activity/${userId}` : '/activity'}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -193,20 +211,25 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     d="M4 12h4l2-4 4 8 2-4h4"
                   />
                 </svg>
-              </button>
+              </Link>
 
-              <Link href="/"
+              <Link 
+              href={userId ? `/activity/${userId}` : '/activity'}
               className='hidden md:block'
               >Activity</Link>
             </li>
 
             {/**Account */}
             <li 
-            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] hover:bg-[#F9F7F7] hover:text-[#004D40]
-            ${isActive(userId ? `/profile/${userId}`: '/profile')} `}>
+             className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
+              isActive(userId ? `/profile/${userId}` : '/profile') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+            } text-[#F9F7F7]`}
+            >
               {/**icon */}
 
-              <Link href={userId ? `/profile/${userId}` : '/profile'}>
+              <Link 
+              href={userId ? `/profile/${userId}` : '/profile'}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -229,7 +252,8 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </li>
 
             {/**Log out button */}
-            <li className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px]">
+            <li 
+            className="h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] hover:bg-[#00332E] text-[#F9F7F7]">
               <button
               onClick={logout}
               >
