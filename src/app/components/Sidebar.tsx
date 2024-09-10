@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const pathname = usePathname();
 
   const isActive = (path: string) => {
-    return pathname === path ? 'bg-[#F9F7F7] text-[#00332E]' : '';
+    return pathname.includes(path )? 'bg-[#F9F7F7] text-[#00332E]' : '';
   }
 
 
@@ -284,11 +284,14 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       </div>
 
      )}
-      {/**top bar */}
+
+
+
+      {/**top bar with a search bar and notification icon */}
       <div className="flex-1">
-        <div className="bg-white p-4 shadow flex justify-between items-center">
+        <div className="bg-[#F9F7F7] p-4 shadow flex justify-between gap-[40px] md:gap-[60px] items-center">
          
-              {/** Toggle Button */}
+        {/** Toggle Button to control the visibility of the side bar*/}
          <button
          onClick={toggleContentVisibility}
           className='p-2 text-white'
@@ -308,30 +311,41 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             />
           </svg>
         </button>
+
+        
           {/** Search Bar */}
-          <div className="flex items-center">
-            <input
+
+          <div className='flex-1 relative'>
+            <div className='relative'>
+              {/**input for search bar */}
+              <input 
               type="text"
-              placeholder="Search..."
-              className="px-4 py-2 border rounded focus:outline-none"
-            />
-            <button className="bg-blue-500 text-white px-4 py-2 rounded ml-2">
+              placeholder='Search here.....'
+              className='w-full p-4 rounded-full bg-transparent border border-[#004D40] focus:outline-none'
+              />
+              
+              <button className='absolute right-1 top-1/2 -translate-y-1/2 p-4 bg-[#004D40] rounded-full '>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="2"
                 stroke="currentColor"
-                className="w-5 h-5"
+                className="w-4 h-4 text-[#F9F7F7]"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M21 21l-6-6m0 0a7.5 7.5 0 1110.607-10.607A7.5 7.5 0 0115 15z"
+                  d="M21 21l-6-6m0 0a7.5 7.5 0 111.5-1.5l6 6z"
                 />
               </svg>
-            </button>
+              </button>
+
+            </div>
           </div>
+
+         
+
 
           {/** Notification Icon */}
           <div className="relative">

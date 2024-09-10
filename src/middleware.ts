@@ -39,6 +39,7 @@ export const config ={
         '/profile',
         '/login',
         '/signup',
+        '/events',
         '/dashboard/:path*' // Protects /dashboard and all its subpaths
 
     ]

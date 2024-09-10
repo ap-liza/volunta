@@ -10,6 +10,8 @@ export default function NewEvenPage({ params }: { params: { id: string } }) {
             <h1 className='font-semibold text-xl'>
                 Post new Events
             </h1>
+
+            
             
             
             

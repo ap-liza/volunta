@@ -44,7 +44,7 @@ export default function Navbar() {
 
             <li><Link 
             className="li relative  text-[#F9F7F7]  " 
-            href='/'>Events</Link></li>
+            href='/events'>Events</Link></li>
 
             <li><Link className=" li relative text-[#F9F7F7]" href='/'>Blog</Link></li>
 
