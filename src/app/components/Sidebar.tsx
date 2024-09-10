@@ -93,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       {isContentVisible &&(
 
         
-      <div className={`min-h-screen h-full bg-[#004D40] text-[#F9F7F7] w-[130px] md:w-[260px] p-[25px]`}>
+      <div className={`fixed top-0 left-0 h-full bg-[#004D40] text-[#F9F7F7] w-[130px] md:w-[260px] p-[25px]`}>
 
         <h1 className='text-center mt-[10px] text-xl font-bold md:text-3xl'>VOLUNTA</h1>
         {/**user info */}
@@ -285,10 +285,15 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
      )}
 
-
+ {/* Main Content */}
+ <div
+        className={`transition-all duration-300 ease-in-out ${
+          isContentVisible ? 'ml-[130px] md:ml-[260px]' : 'ml-0'
+        }`}
+      />
 
       {/**top bar with a search bar and notification icon */}
-      <div className="flex-1">
+      <div className="flex-1 ">
         <div className="bg-[#F9F7F7] p-4 shadow flex justify-between gap-[40px] md:gap-[60px] items-center">
          
         {/** Toggle Button to control the visibility of the side bar*/}

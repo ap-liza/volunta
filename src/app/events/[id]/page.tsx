@@ -5,6 +5,7 @@ import DashboardLay from '../../components/Dashboardlay'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import NewEventsInfo from '@/app/components/NewEventsInfo';
 
  // Adjust path as needed
 //import UserProfile from './UserProfile'
@@ -33,13 +34,25 @@ export default function EventsPage({ params }: { params: { id: string } }) {
 
     return (
         <DashboardLay>
-            <h1 className='font-semibold text-xl'>
-                General Events
-            </h1>
+            <div className='flex justify-between'>
+                <h1 className='font-semibold text-xl'>
+                    Upcoming Events
+                </h1>
 
-            <Link href={`/newevents/${userId}`} >
-                Post New Event
-            </Link>
+                <Link 
+                href={`/newevents/${userId}`}
+                className='font-semibold'
+                >
+
+                    Post New Event
+                </Link>
+            </div>
+
+            <NewEventsInfo/>
+           
+            
+            
+           
             
             
             

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -138,7 +139,7 @@ export default function LoginPage(){
         >
             Email
         </label>
-        </div>
+    </div>
 
     {/** 
                     <label htmlFor="email">Email:</label>
