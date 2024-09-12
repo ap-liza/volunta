@@ -1,9 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { connect } from "@/databaseConfig/dbConfig";
-import User from "@/models/userModel";
+import Event from '@/models/eventModels';
 import { NextRequest, NextResponse } from "next/server";
 import { PassThrough } from "stream";
-
 
 connect();
 
@@ -17,7 +16,7 @@ cloudinary.config({
 const streamUpload = (buffer: Buffer): Promise<any> => {
     return new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-            { folder: "user_profile_pics" },
+            { folder: "event_images" },
             (error, result) => {
                 if (error) {
                     reject(error);
@@ -53,7 +52,7 @@ export async function POST(request: NextRequest) {
 
         // Update user profile picture in MongoDB
         const userId = request.headers.get('user-id');
-        const user = await User.findById(userId);
+        const user = await Event.findById(userId);
 
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });

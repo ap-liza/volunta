@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-//creating a database in MongodB
+//creating a user database in MongodB
 
 const userSchema = new mongoose.Schema({
     firstName:{

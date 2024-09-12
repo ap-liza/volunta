@@ -9,17 +9,7 @@ import NewEventsInfo from '@/app/components/NewEventsInfo';
 export default function NewEventPage({ params }: { params: { id: string } }) {
     return (
         <DashboardLay>
-            <h1 className='font-semibold text-xl'>
-                Post new Events
-            </h1>
-
-            <NewEventsForm/>
-           
-
-            
-            
-            
-            
+            <NewEventsForm/>  
         </DashboardLay>
     );
 }
