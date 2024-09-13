@@ -12,9 +12,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 
     try {
+        console.log("Fetching events for userId:", id);
+
         const events = await Event.find({ userId: id }).exec();
+
+        console.log("Fetched events:", events); 
+
         return NextResponse.json({ events });
     } catch (error) {
+        console.error("Error fetching events:", error);
         if (error instanceof Error) {
             return NextResponse.json({ message: 'Error fetching events', error: error.message }, { status: 500 });
         } else {

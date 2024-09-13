@@ -20,7 +20,14 @@ export default function NewEventsInfo() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get('/api/users/getevents');
-        setEvents(response.data.events);
+
+        //sort events by their time created
+        const sortedEvents = response.data.events.sort((a: any, b: any) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+
+        
+        setEvents(sortedEvents);
       } catch (error) {
         toast.error("Failed to fetch events. Please try again.");
         console.error("Error fetching events:", error);

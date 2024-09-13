@@ -23,7 +23,13 @@ export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) 
     const fetchEvents = async () => {
       try {
         const response = await axios.get(`/api/users/getevents/${userId}`);
-        setEvents(response.data.events);
+
+        //sort events by their time created
+        const sortedEvents = response.data.events.sort((a: any, b: any) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+
+        setEvents(sortedEvents);
       } catch (error) {
         toast.error("Failed to fetch events. Please try again.");
         console.error("Error fetching events:", error);
