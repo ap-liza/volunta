@@ -62,7 +62,7 @@ export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) 
             </div>
 
             <div className="flex gap-2">
-              <RemoveEvents  />
+              <RemoveEvents id={event._id} />
               <Link href={`/editEvents/${event._id}`}>
                 <HiPencilAlt size={24} />
               </Link>
