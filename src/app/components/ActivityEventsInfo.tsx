@@ -11,7 +11,7 @@ import axios from "axios";
 
 
 // Client-side component to display events
-export default function NewEventsInfo() {
+export default function ActivityEventsInfo() {
 
     const [events, setEvents] = useState([]);
     
@@ -52,18 +52,16 @@ export default function NewEventsInfo() {
               <p className="text-sm">Organizer: {event.organizerName}</p>
             </div>
 
-            {/**
-             * <div className="flex gap-2">
+            <div className="flex gap-2">
               <RemoveEvents  />
               <Link href={`/editEvents/${event._id}`}>
                 <HiPencilAlt size={24} />
               </Link>
-            </div> */}
-            
+            </div>
           </div>
         ))
       ) : (
-        <p>No events available.</p>
+        <p>No events posted.</p>
       )}
             
         </>

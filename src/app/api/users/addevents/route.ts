@@ -4,6 +4,7 @@ import Event from '@/models/eventModels';
 import { NextRequest, NextResponse } from "next/server";
 import { PassThrough } from "stream";
 
+
 connect();
 
 cloudinary.config({
@@ -35,9 +36,13 @@ const streamUpload = (buffer: Buffer): Promise<any> => {
 
 export async function POST(request: NextRequest) {
     try {
+
+       
+
         // Parse the request body to get the file and other event details
         const formData = await request.formData();
         const file = formData.get('eventImage') as Blob; // get the image file from the form data
+      
 
         if (!file) {
             return NextResponse.json({ message: 'No file provided' }, { status: 400 });
@@ -60,6 +65,7 @@ export async function POST(request: NextRequest) {
         const contact = formData.get('contact');
         const deadline = formData.get('deadline');
         const organizerName = formData.get('organizerName');
+        const userId = formData.get('userId') as string;
 
         // Create new event with the image URL from Cloudinary
         const newEvent = new Event({
@@ -69,10 +75,12 @@ export async function POST(request: NextRequest) {
             dateAndTime,
             eventType,
             volunteerRequirements,
-            eventImage: uploadResponse.secure_url, // Save the Cloudinary URL
+            eventImage: uploadResponse.secure_url, //the Cloudinary URL
             contact,
             deadline,
-            organizerName
+            organizerName,
+            userId,
+            
         });
 
         const savedEvent = await newEvent.save();

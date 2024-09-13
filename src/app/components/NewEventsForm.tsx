@@ -34,7 +34,8 @@ export default function NewEventsForm() {
     eventImage: '' as File | string,
     contact: '',
     deadline: '',
-    organizerName: ''
+    organizerName: '',
+    userId
   })
 
   const [loading, setLoading] = useState(false)
@@ -64,6 +65,12 @@ export default function NewEventsForm() {
       formData.append('contact', event.contact)
       formData.append('deadline', event.deadline)
       formData.append('organizerName', event.organizerName)
+     
+      // Add userId to the form data
+        if (userId) {
+        formData.append('userId', userId);
+        console.log('Submitting User ID:', userId);
+        }
 
       const response = await axios.post('/api/users/addevents/', formData, {
         headers: {
