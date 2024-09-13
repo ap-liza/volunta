@@ -29,8 +29,11 @@ export default function LoginPage(){
         try{
             setLoading(true)
             const response = await axios.post('/api/users/login', user)
+            // Extract the userId from the response (make sure it's returned from your API)
+            const userId = response.data.userId;
+
             toast.success('Login successful')
-            router.push('/events/${userId}')
+            router.push(`/events/${userId}`)
         }
         catch(error:any){
             console.log('Login failed', error.message)
@@ -181,7 +184,7 @@ export default function LoginPage(){
     </div>
 
 
-{/**Sign in button */}
+{/**Sign in button */}  
                     <button 
                     onClick={onLogin}
                     className={`px-2 py-4 rounded-full mt-4 ${buttonDisabled ? 'disabled-button' : 'enabled-button'}`}
