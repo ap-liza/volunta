@@ -8,7 +8,7 @@ import toast from "react-hot-toast"
 export default function NewEventsForm() {
 
 //getting the user id to navigate back to the events page
- const [userId, setUserId] = useState<string | null>(null);
+ const [userId, setUserId] = useState('');
 
  useEffect(() => {
      const fetchUserId = async () => {
@@ -36,6 +36,7 @@ export default function NewEventsForm() {
     deadline: '',
     organizerName: '',
     userId
+    
   })
 
   const [loading, setLoading] = useState(false)
@@ -65,12 +66,9 @@ export default function NewEventsForm() {
       formData.append('contact', event.contact)
       formData.append('deadline', event.deadline)
       formData.append('organizerName', event.organizerName)
+      formData.append('userId', userId as string)
      
-      // Add userId to the form data
-        if (userId) {
-        formData.append('userId', userId);
-        console.log('Submitting User ID:', userId);
-        }
+      
 
       const response = await axios.post('/api/users/addevents/', formData, {
         headers: {

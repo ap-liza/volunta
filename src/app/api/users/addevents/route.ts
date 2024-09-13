@@ -35,6 +35,8 @@ const streamUpload = (buffer: Buffer): Promise<any> => {
 };
 
 export async function POST(request: NextRequest) {
+
+
     try {
 
        
@@ -42,10 +44,12 @@ export async function POST(request: NextRequest) {
         // Parse the request body to get the file and other event details
         const formData = await request.formData();
         const file = formData.get('eventImage') as Blob; // get the image file from the form data
+
+        const userId = formData.get('userId');
       
 
-        if (!file) {
-            return NextResponse.json({ message: 'No file provided' }, { status: 400 });
+        if (!file || !userId) {
+            return NextResponse.json({ message: 'No file provided and userId' }, { status: 400 });
         }
 
         // Convert Blob to Buffer for Cloudinary
@@ -65,7 +69,8 @@ export async function POST(request: NextRequest) {
         const contact = formData.get('contact');
         const deadline = formData.get('deadline');
         const organizerName = formData.get('organizerName');
-        const userId = formData.get('userId') as string;
+        
+    
 
         // Create new event with the image URL from Cloudinary
         const newEvent = new Event({
@@ -79,7 +84,8 @@ export async function POST(request: NextRequest) {
             contact,
             deadline,
             organizerName,
-            userId,
+            userId
+            
             
         });
 

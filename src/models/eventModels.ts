@@ -44,11 +44,12 @@ const eventSchema = new mongoose.Schema(
         required: [true, 'Please provide the name of the organizer']
 
     },
-    // Reference to the user who created the event
-    /** 
+    // Adding a reference to the User model
     userId: { 
-        type: String, 
-        required: true },*/
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'users', 
+        required: true }
+    
 },
 {
     timestamps: true,

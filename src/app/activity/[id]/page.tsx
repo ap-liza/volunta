@@ -12,7 +12,7 @@ export default function ActivityPage({ params }: { params: { id: string } }) {
             </h1>
             You posted
             
-            <ActivityEventsInfo/>
+            <ActivityEventsInfo userId={params.id}/>
             
         </DashboardLay>
     );

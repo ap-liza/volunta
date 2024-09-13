@@ -8,18 +8,21 @@ import { useEffect, useState } from 'react';
 import toast from "react-hot-toast";
 import axios from "axios";
 
-
+interface ActivityEventsInfoProps {
+    userId: string;
+}
 
 // Client-side component to display events
-export default function ActivityEventsInfo() {
+export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) {
 
     const [events, setEvents] = useState([]);
     
      // Fetch events from the API when the component mounts
   useEffect(() => {
+    console.log("Fetching events for userId:", userId);
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('/api/users/getevents');
+        const response = await axios.get(`/api/users/getevents/${userId}`);
         setEvents(response.data.events);
       } catch (error) {
         toast.error("Failed to fetch events. Please try again.");
@@ -28,7 +31,7 @@ export default function ActivityEventsInfo() {
     };
 
     fetchEvents();
-  }, []);
+  }, [userId]);
   
     return (
         <>
