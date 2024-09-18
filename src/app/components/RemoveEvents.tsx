@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface RemoveEventsProps {
     id: string;
@@ -14,7 +15,7 @@ interface RemoveEventsProps {
 export default function RemoveEvents({ id }: RemoveEventsProps){
 
    
-    
+    const router = useRouter()
     const [loading, setLoading] = useState(false);
 
     const deleteEvent = async () => {
@@ -36,7 +37,9 @@ export default function RemoveEvents({ id }: RemoveEventsProps){
               const response = await axios.delete(`/api/users/deleteEvents/${id}`);
               if (response.status === 200) {
                 Swal.fire('Deleted!', response.data.message, 'success');
-                window.location.reload(); // Refresh the page
+                // Refresh the page 
+                //window.location.reload(); 
+                router.refresh()
               }
             } catch (error) {
               Swal.fire('Error!', 'Failed to delete event', 'error');
@@ -45,6 +48,8 @@ export default function RemoveEvents({ id }: RemoveEventsProps){
             }
           }
         });
+
+        
       };
     return(
        <button 

@@ -3,11 +3,9 @@ import Event from '@/models/eventModels';
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from 'cloudinary';
 import { PassThrough } from "stream";
+
 connect();
 
-interface EventParams {
-    eventId: string;
-  }
 
 
 //for image upload 
@@ -38,12 +36,11 @@ const streamUpload = (buffer: Buffer): Promise<any> => {
 
 
 //fetch event
-export async function GET(request: NextRequest, { params }: { params: EventParams }) {
-
-    const { eventId } = params;
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
 
     try {
-        const event = await Event.findById(eventId);
+        const { id } = params;
+        const event = await Event.findById(id);
         if (!event) {
             return NextResponse.json(
                 { message: 'Event not found' },
@@ -60,35 +57,37 @@ export async function GET(request: NextRequest, { params }: { params: EventParam
 }
 
 //put event 
-export async function PUT(request: NextRequest,{ params }: { params: EventParams }) {
-    const { eventId } = params;
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+
+    const { id } = params;
 
     try {
         const formData = await request.formData();
         const file = formData.get('eventImage') as Blob;
 
-        let eventImageUrl = null;
-        if (file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const uploadResponse = await streamUpload(buffer);
-            eventImageUrl = uploadResponse.secure_url;
+        // Check if a new image is uploaded
+        let eventImage = formData.get('eventImage');
+        if (eventImage && eventImage instanceof Blob) {
+            const buffer = Buffer.from(await eventImage.arrayBuffer());
+            const uploadResult = await streamUpload(buffer);
+            eventImage = uploadResult.secure_url;
         }
 
+        // Update event fields
         const updatedEvent = {
-            eventTitle: formData.get('eventTitle'),
-            eventDescription: formData.get('eventDescription'),
-            location: formData.get('location'),
-            dateAndTime: formData.get('dateAndTime'),
-            eventType: formData.get('eventType'),
-            volunteerRequirements: formData.get('volunteerRequirements'),
-            contact: formData.get('contact'),
-            deadline: formData.get('deadline'),
-            organizerName: formData.get('organizerName'),
-            ...(eventImageUrl && { eventImage: eventImageUrl })
+            eventTitle: formData.get('eventTitle') || undefined,
+            eventDescription: formData.get('eventDescription') || undefined,
+            location: formData.get('location') || undefined,
+            dateAndTime: formData.get('dateAndTime') || undefined,
+            eventType: formData.get('eventType') || undefined,
+            volunteerRequirements: formData.get('volunteerRequirements') || undefined,
+            contact: formData.get('contact') || undefined,
+            deadline: formData.get('deadline') || undefined,
+            organizerName: formData.get('organizerName') || undefined,
+            eventImage: eventImage || undefined,
         };
 
-        const event = await Event.findByIdAndUpdate(eventId, updatedEvent, { new: true });
+        const event = await Event.findByIdAndUpdate(id, updatedEvent, { new: true });
 
         if (!event) {
             return NextResponse.json({ message: 'Event not found' }, { status: 404 });

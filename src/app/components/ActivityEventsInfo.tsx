@@ -20,10 +20,12 @@ export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) 
      // Fetch events from the API when the component mounts
   useEffect(() => {
     console.log("Fetching events for userId:", userId);
+    
     const fetchEvents = async () => {
       try {
         const response = await axios.get(`/api/users/getevents/${userId}`);
 
+        //const id = response.data.events.event_id
         //sort events by their time created
         const sortedEvents = response.data.events.sort((a: any, b: any) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -41,9 +43,9 @@ export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) 
   
     return (
         <>
-             {events.length > 0 ? (
-        events.map((event: any) => (
-          <div key={event._id} className="p-4 border border-[#004D40] my-3 flex justify-between items-start">
+        {events.length > 0 ? (
+          events.map((event: any) => (
+            <div key={event._id} className="p-4 border border-[#004D40] my-3 flex justify-between items-start">
             <div>
               <img
                 src={event.eventImage || '/default-event-image.jpg'} // Fallback if no image
