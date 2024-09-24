@@ -67,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             console.log(res.data)
             const { firstName, profilePicture } = res.data.data
             setUserName(firstName)
-            setProfilePicture((profilePicture || 'profile-default.png'))
+            setProfilePicture((profilePicture || '/profile-default.png'))
         } catch (error: any) {
             console.error('Failed to fetch user details:', error.message)
             toast.error('Failed to load user details')
@@ -106,6 +106,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               src={profilePicture}
               alt="profile"
               className="w-[50px] h-[50px] overflow-hidden rounded-full shadow-lg"
+              
             />
           </div>
           {/**info */}
