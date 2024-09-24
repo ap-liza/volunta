@@ -2,11 +2,12 @@
 'use client'; // Ensures the component is client-side
 
 import Link from "next/link";
-import RemoveEvents from "./RemoveEvents";
-import { HiPencilAlt } from 'react-icons/hi';
+//import RemoveEvents from "./RemoveEvents";
+//import { HiPencilAlt } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
 import toast from "react-hot-toast";
 import axios from "axios";
+import { FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClock, FaBook, FaPhone } from 'react-icons/fa';
 
 
 
@@ -37,11 +38,80 @@ export default function NewEventsInfo() {
     fetchEvents();
   }, []);
   
-    return (
-        <>
-             {events.length > 0 ? (
-        events.map((event: any) => (
-          <div key={event._id} className="p-4 border border-[#004D40] my-3 flex justify-between items-start">
+  return (
+    <>
+    <div className="min-h-screen bg-gray-100 py-8">
+
+   
+        <div className="max-w-7xl mx-auto space-y-6">
+            {events.length > 0 ? (
+                events.map((event: any) => {
+                    // Create a Date object from dateAndTime
+                    const eventDate = new Date(event.dateAndTime);
+                    const formattedDate = eventDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    const formattedTime = eventDate.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+
+                    return (
+                        <div key={event._id} className=" max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                            {/* Event Image */}
+                            <div className="flex-none w-full md:w-1/2 h-64 ">
+                                <img
+                                    src={event.eventImage || '/default-event-image.jpg'}
+                                    alt="Event Image"
+                                    width={500}
+                                    height={300}
+                                    className=" object-cover"
+                                />
+                              </div>
+
+
+                                {/* Event details */}
+                    <div className="p-4">
+                  <h2 className="text-xl font-semibold text-gray-800">{event.eventTitle}</h2>
+                  <p className="text-gray-600 mt-2">
+                    <span className="font-medium">Date:</span> {formattedDate}
+                  </p>
+                  <p className="text-gray-600">
+                    <span className="font-medium">Time:</span> {formattedTime}
+                  </p>
+                  <p className="text-gray-600 mt-2">
+                    <span className="font-medium">Location:</span> {event.location}
+                  </p>
+
+                  <p className="mt-4 text-gray-600">{event.eventDescription}</p>
+
+                  <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+                    Get Tickets
+                  </button>
+                            </div>
+
+                          
+
+                           
+                        </div>
+                    );
+                })
+      ) : (
+        <p>No events available.</p>
+      )}
+
+    </div>
+
+    </div>
+      </>
+    );
+}
+
+
+{/** 
             <div>
               <img
                 src={event.eventImage || '/default-event-image.jpg'} // Fallback if no image
@@ -59,20 +129,4 @@ export default function NewEventsInfo() {
               <p className="text-sm">Organizer: {event.organizerName}</p>
             </div>
 
-            {/**
-             * <div className="flex gap-2">
-              <RemoveEvents  />
-              <Link href={`/editEvents/${event._id}`}>
-                <HiPencilAlt size={24} />
-              </Link>
-            </div> */}
-            
-          </div>
-        ))
-      ) : (
-        <p>No events available.</p>
-      )}
-            
-        </>
-    );
-}
+*/} 
