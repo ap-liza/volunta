@@ -60,47 +60,73 @@ export default function NewEventsInfo() {
                     });
 
                     return (
-                        <div key={event._id} className=" max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                        <div key={event._id} className=" bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:scale-105 duration-300">
+
                             {/* Event Image */}
-                            <div className="flex-none w-full md:w-1/2 h-64 ">
+
+                            <div className="relative 
+                            h-[275px] md:h-[290px]  w-full ">
                                 <img
                                     src={event.eventImage || '/default-event-image.jpg'}
                                     alt="Event Image"
-                                    width={500}
-                                    height={300}
-                                    className=" object-cover"
+                                    className=" object-cover h-full w-full"
                                 />
+
+                                <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full h-24"></div>
                               </div>
 
 
                                 {/* Event details */}
-                    <div className="p-4">
-                  <h2 className="text-xl font-semibold text-gray-800">{event.eventTitle}</h2>
-                  <p className="text-gray-600 mt-2">
-                    <span className="font-medium">Date:</span> {formattedDate}
-                  </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Time:</span> {formattedTime}
-                  </p>
-                  <p className="text-gray-600 mt-2">
-                    <span className="font-medium">Location:</span> {event.location}
-                  </p>
+                    <div className="p-6">
+                      
+                      <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                        {event.eventTitle}
+                      </h2>
 
-                  <p className="mt-4 text-gray-600">{event.eventDescription}</p>
+                      <div className="flex items-center text-gray-600 space-x-4 mb-4" >
 
-                  <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                    Get Tickets
-                  </button>
-                            </div>
+                      {/**date */}
+                      <div className="flex items-center">
+                        <FaCalendarAlt className="mr-2" />
+                        <span>{formattedDate}</span>
+                      </div>
 
-                          
+                      {/**time */}
+                      <div className="flex items-center">
+                        <FaClock className="mr-2" />
+                        <span>{formattedTime}</span>
+                      </div>
 
-                           
-                        </div>
-                    );
-                })
+                      {/**location */}
+                      <div className="flex items-center">
+                        <FaMapMarkerAlt className="mr-2" />
+                        <span>{event.location}</span>
+                      </div>
+
+                    </div>
+
+                      {/**Event description */}
+                    <p className="text-gray-700 mb-6">{event.eventDescription}</p>
+
+                    <div className="flex justify-between items-center">
+
+                    <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                      Register
+                    </button>
+                    <Link href={`/events/${event._id}`} passHref 
+                    className="text-blue-500 hover:underline"
+                    >
+                      View Details
+                    </Link>
+                    </div>
+                  </div>
+                </div>
+
+
+              );
+            })
       ) : (
-        <p>No events available.</p>
+        <p className="text-center text-gray-500">No events available.</p>
       )}
 
     </div>
@@ -123,7 +149,7 @@ export default function NewEventsInfo() {
               <p className="text-sm">Location: {event.location}</p>
               <p className="text-sm">Date and Time: {event.dateAndTime}</p>
               <p className="text-sm">Type: {event.eventType}</p>
-              <p className="text-sm">Volunteer Requirements: {event.volunteerRequirements}</p>
+              <p className="text-sm">Volunteer Requirements: {event.volunteerRequirements}</p>~
               <p className="text-sm">Contact: {event.contact}</p>
               <p className="text-sm">Deadline: {event.deadline}</p>
               <p className="text-sm">Organizer: {event.organizerName}</p>
