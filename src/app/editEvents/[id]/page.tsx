@@ -5,6 +5,7 @@ import EditEventsForm from '@/app/components/EditEventsForm';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 
 export default function EditEvents() {
     const { id } = useParams(); // Get event ID from URL
@@ -33,13 +34,24 @@ export default function EditEvents() {
         }
     }, [id]);
 
-    if (loading) return <p>Loading...</p>;
+   
 
     return (
         <DashboardLay>
-            <div>
+
+            {loading ? (
+                <div className="flex justify-center items-center min-h-screen">
+                    <ClipLoader color="#36d7b7" size={150} /> {/* Spinner during loading */}
+                </div>
+            ) : (
+                <div>
+                    {eventData ? <EditEventsForm event={eventData} /> : <p>Event not found.</p>}
+                </div>
+            )}
+            
+            {/*<div>
                 {eventData ? <EditEventsForm event={eventData} /> : <p>Event not found.</p>}
-            </div>
+            </div>*/}
         </DashboardLay>
     );
 }

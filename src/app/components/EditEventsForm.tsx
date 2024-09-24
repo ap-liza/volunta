@@ -2,6 +2,8 @@
 'use client';
 import axios from 'axios';
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 
 interface EventFormData {
@@ -35,6 +37,8 @@ interface EditEventFormProps {
 
 
 export default function EditEventsForm({ event }: EditEventFormProps) {
+
+    const router = useRouter();
     
     const [formData, setFormData] = useState<EventFormData>({
         eventTitle: event.eventTitle,
@@ -51,6 +55,9 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
 
     const [existingImageUrl, setExistingImageUrl] = useState<string>(event.eventImage);
 
+//state for when the update event button is clicked
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, files } = e.target as HTMLInputElement;
         setFormData((prevData) => ({
@@ -59,8 +66,31 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
         }));
     };
 
+
+//getting the user id
+const [userId, setUserId] = useState<string | null>(null);
+
+useEffect(() => {
+    const fetchUserId = async () => {
+        try {
+            const res = await axios.get('/api/users/user1');
+            setUserId(res.data.data._id);
+        } catch (error:any) {
+            console.error('Failed to fetch user ID:', error.message);
+            toast.error('failed to fetch user id')
+        }
+    };
+
+    fetchUserId();
+}, []);
+
+
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        // Set loading to true when submission starts
+        setLoading(true);
 
         try {
             const data = new FormData();
@@ -88,10 +118,14 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
                 }
             });
 
-            alert('Event updated successfully!');
+            toast.success('Event updated successfully!');
+            router.push(`/activity/${userId}`)
         } catch (error) {
             console.error('Error updating event:', error);
-            alert('Failed to update event.');
+            toast.error('Failed to update event.');
+        }finally {
+            setLoading(false); 
+            // Set loading to false after operation completes
         }
     };
 
@@ -382,7 +416,8 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
                 <div className="flex justify-center mt-6">
                     <button 
                         type="submit"
-                        className="px-6 py-3 bg-[#FF6F61] text-white font-semibold rounded-md shadow hover:bg-[#C7A500] transition duration-300"
+                        disabled={loading}
+                        className={`px-6 py-3 ${loading ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400' : 'bg-[#FF6F61]'} text-white font-semibold rounded-md shadow hover:bg-[#C7A500] transition duration-300`}
                         
                     >
                        Update Event

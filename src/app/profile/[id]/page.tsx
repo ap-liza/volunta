@@ -4,7 +4,7 @@ import DashboardLay from '../../components/Dashboardlay'
 
  // Adjust path as needed
 import UserProfile from './UserProfile'
-import UserInfo from './UserInfo'
+//import UserInfo from './UserInfo'
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
     return (
@@ -13,7 +13,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
             
             
             <UserProfile params={params} />
-            <UserInfo/>
+            
         </DashboardLay>
     );
 }
