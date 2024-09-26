@@ -185,15 +185,15 @@ export default function LoginPage(){
 
 
 {/**Sign in button */}  
-                    <button 
-                    onClick={onLogin}
-                    className={`px-2 py-4 rounded-full mt-4 ${buttonDisabled ? 'disabled-button' : 'enabled-button'}`}
-                    disabled={buttonDisabled} >
-                    Log in
-                    </button>
+        <button 
+            onClick={onLogin}
+            className={`px-2 py-4 rounded-full mt-4 ${buttonDisabled || loading ? 'disabled-button' : 'enabled-button'}`}
+            disabled={buttonDisabled || loading} >
+                Log in
+        </button>
 
                     
-{/**this button is going to be used for google sign */}
+{/**this button is going to be used for google sign to be implemented later */}
         <button className="border-4 p-4">
             Google
         </button>

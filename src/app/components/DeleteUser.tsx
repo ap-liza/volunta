@@ -52,13 +52,22 @@ interface DeleteUserProps {
   
     }
     return(
-        <button 
-        onClick={deleteUser}
-        className="text-red-400"
-        disabled={loading}
-        >
-           {loading ? 'Deleting...' : 'Delete Account'}
-         <HiOutlineTrash size={24}/>
+        <button
+            onClick={deleteUser}
+            className={`text-white py-2 px-6 rounded-full transition duration-200 ease-in-out ${
+                loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-400 hover:bg-red-600'
+            }`}
+            disabled={loading}
+            >
+            {loading ? (
+                <>
+                Deleting...
+                <span className="ml-2 animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4 inline-block"></span>
+                </>
+            ) : (
+                'Delete Account'
+            )}
+            
         </button>
      )
   }
