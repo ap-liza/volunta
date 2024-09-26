@@ -224,6 +224,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </button>
     </div>
 
+<button>Delete Account</button>
         
 
             

@@ -163,10 +163,13 @@ export default function NewEventsInfo() {
         </div>
          {/* Modal */}
       {selectedEvent && (
-        <EventDetailsModal 
+        <div>
+          <EventDetailsModal 
           event={selectedEvent} 
           onClose={() => setSelectedEvent(null)} // Close the modal
         />
+        </div>
+        
       )}
 
     </div>
