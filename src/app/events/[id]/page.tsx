@@ -49,19 +49,21 @@ export default function EventsPage({ params }: { params: { id: string } }) {
         );
     }
 
-    return (
+    return (  
         <DashboardLay>
-            <div className='flex justify-between'>
-                <h1 className='font-semibold text-xl'>
+            <div className='flex justify-between items-end'>
+                <h1 className='font-semibold text-xl text-[#00332E]'>
                     Upcoming Events
                 </h1>
 
                 <Link 
                 href={`/newevents/${userId}`}
-                className='font-semibold'
+                className='flex items-center justify-center bg-gradient-to-r from-[#FF9F8B] to-[#FF6F61] text-white rounded-full w-10 h-10 shadow-lg transition duration-200 hover:from-[#D1B500] hover:to-[#C7A500]'
                 >
-
-                    Post New Event
+                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    
                 </Link>
             </div>
 

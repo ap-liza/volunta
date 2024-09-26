@@ -94,7 +94,181 @@ export default function DashboardPage() {
       </div>
     </div>
 </div>
-</div>
+  </div>
+
+
+  <div className="p-6 bg-gray-100 min-h-screen">
+            <div className="max-w-4xl mx-auto bg-white p-6 rounded-md shadow-lg">
+                <h1 className="text-2xl font-bold mb-4">Account Settings</h1>
+
+                {/* Profile Image Section */}
+                <div className="flex items-center gap-6 mb-8">
+                    <div className="relative w-[100px] h-[100px]">
+                        <img
+                            src="/profile-default.png" // Placeholder profile image
+                            alt="Profile"
+                            className="rounded-full object-cover w-full h-full"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="profilePicture" className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md">
+                            Upload New Image
+                        </label>
+                        <input
+                            type="file"
+                            id="profilePicture"
+                            className="hidden"
+                        />
+                    </div>
+                </div>
+
+                {/* User Details */}
+                <div className="mb-8">
+                    <h2 className="text-xl font-semibold">Personal Information</h2>
+                    <div className="mt-4">
+                        <div className="flex flex-col md:flex-row md:gap-8 mb-4">
+                            <div className="w-full">
+                                <label className="block text-gray-600">Name</label>
+                                <input
+                                    type="text"
+                                    value="John Doe"
+                                    disabled
+                                    className="mt-2 w-full p-3 border rounded-md bg-gray-200 text-gray-500"
+                                />
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-gray-600">Email</label>
+                                <input
+                                    type="email"
+                                    value="johndoe@example.com"
+                                    disabled
+                                    className="mt-2 w-full p-3 border rounded-md bg-gray-200 text-gray-500"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-gray-600">Contact Number</label>
+                            <input
+                                type="text"
+                                placeholder="Enter your contact number"
+                                className="mt-2 w-full p-3 border rounded-md bg-white"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-gray-600">Bio</label>
+                            <textarea
+                                placeholder="Tell us about yourself..."
+                                className="mt-2 w-full p-3 border rounded-md bg-white"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Skills Section */}
+                <div className="mb-8">
+                    <h2 className="text-xl font-semibold">Skills</h2>
+                    <div className="mt-4">
+                        <ul className="flex flex-wrap gap-2">
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">JavaScript</li>
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">React</li>
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">Node.js</li>
+                        </ul>
+
+                        <div className="mt-4">
+                            <input
+                                type="text"
+                                placeholder="Add a new skill"
+                                className="p-2 border rounded-md w-full mb-2"
+                            />
+                            <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+                                Add Skill
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Edit/Save Buttons */}
+                <div className="flex gap-4">
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                        Edit Profile
+                    </button>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded-md">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+  </div>
+
+  <div className="p-6 bg-gray-100 min-h-screen">
+            <div className="max-w-4xl mx-auto bg-white p-6 rounded-md shadow-lg">
+                <h1 className="text-2xl font-bold mb-4">Account Information</h1>
+
+                {/* Profile Image Section */}
+                <div className="flex items-center gap-6 mb-8">
+                    <div className="relative w-[120px] h-[120px]">
+                        <img
+                            src="/profile-default.png" // Placeholder profile image
+                            alt="Profile"
+                            className="rounded-full object-cover w-full h-full"
+                        />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-semibold">John Doe</h2>
+                        <p className="text-gray-600">johndoe@example.com</p>
+                    </div>
+                </div>
+
+                {/* User Details */}
+                <div className="mb-8">
+                    <h2 className="text-lg font-semibold text-gray-700">Personal Information</h2>
+                    <div className="mt-4 space-y-4">
+                        <div className="flex flex-col md:flex-row md:gap-8">
+                            <div className="w-full">
+                                <label className="block text-gray-600">Name</label>
+                                <p className="mt-1 text-lg text-gray-900">John Doe</p>
+                            </div>
+                            <div className="w-full">
+                                <label className="block text-gray-600">Email</label>
+                                <p className="mt-1 text-lg text-gray-900">johndoe@example.com</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-gray-600">Contact Number</label>
+                            <p className="mt-1 text-lg text-gray-900">+1 234 567 890</p>
+                        </div>
+
+                        <div>
+                            <label className="block text-gray-600">Bio</label>
+                            <p className="mt-1 text-lg text-gray-900">Software developer with a passion for building web applications and solving real-world problems.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Skills Section */}
+                <div className="mb-8">
+                    <h2 className="text-lg font-semibold text-gray-700">Skills</h2>
+                    <div className="mt-4">
+                        <ul className="flex flex-wrap gap-2">
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">JavaScript</li>
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">React</li>
+                            <li className="bg-gray-200 px-3 py-1 rounded-full text-sm">Node.js</li>
+                            {/* Add more skills as needed */}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Edit Button */}
+                <div className="flex justify-end">
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
 
 
      </>

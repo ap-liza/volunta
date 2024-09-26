@@ -330,7 +330,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               className='w-full p-4 rounded-full bg-transparent border border-[#004D40] focus:outline-none'
               />
               
-              <button className='absolute right-1 top-1/2 -translate-y-1/2 p-4 bg-[#004D40] rounded-full '>
+              <button className='absolute right-1 top-1/2 -translate-y-1/2 p-4 bg-gradient-to-r from-[#FF9F8B] to-[#FF6F61] rounded-full '>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

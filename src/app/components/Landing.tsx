@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import React, { useState, useEffect } from 'react';
@@ -257,9 +258,24 @@ export default function Landing(){
       <footer className="py-10 bg-[#333333] text-center">
         <p className="text-[#F9F7F7]">© 2024 Volunta. All rights reserved.</p>
         <div className="mt-4 flex justify-center gap-6">
-          <a href="#"><FontAwesomeIcon  className="text-[#FF6F61] w-[25px] h-[25px]" icon={faFacebookF} /></a>
-          <a href="#"><FontAwesomeIcon  className="text-[#FF6F61]   w-[25px] h-[25px]" icon={faTwitter} /></a>
-          <a href="#"><FontAwesomeIcon  className="text-[#FF6F61]  w-[25px] h-[25px]" icon={faInstagram} /></a>
+
+          <a href="#">
+            <FontAwesomeIcon  
+            className="text-[#FF6F61] hover:text-[#C7A500] w-[25px] h-[25px] " 
+            icon={faFacebookF} />
+          </a>
+
+          <a href="#">
+            <FontAwesomeIcon  
+            className="text-[#FF6F61] hover:text-[#C7A500]  w-[25px] h-[25px]" 
+            icon={faTwitter} />
+          </a>
+
+          <a href="#">
+            <FontAwesomeIcon  
+            className="text-[#FF6F61] hover:text-[#C7A500] w-[25px] h-[25px]" 
+            icon={faInstagram} />
+          </a>
           
         </div>
       </footer>

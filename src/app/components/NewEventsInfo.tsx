@@ -8,6 +8,23 @@ import { useEffect, useState } from 'react';
 import toast from "react-hot-toast";
 import axios from "axios";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClock, FaBook, FaPhone } from 'react-icons/fa';
+import EventDetailsModal from "./EventsDetailsModal";
+
+interface EventType {
+  _id: string;
+  eventTitle: string;
+  eventDescription: string;
+  eventImage?: string;
+  dateAndTime: string;
+  location: string;
+  volunteerRequirements: string;
+  eventType: string;
+  contact: string;
+  deadline: string;
+  organizerName: string;
+  createdAt: string;
+  // Add other fields if needed
+}
 
 
 
@@ -15,6 +32,9 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClock, FaBook, FaPhone } from 
 export default function NewEventsInfo() {
 
     const [events, setEvents] = useState([]);
+
+    //modal
+    const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null); // Use EventType for selected event
     
      // Fetch events from the API when the component mounts
   useEffect(() => {
@@ -40,10 +60,10 @@ export default function NewEventsInfo() {
   
   return (
     <>
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen ">
 
    
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className=" grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
             {events.length > 0 ? (
                 events.map((event: any) => {
                     // Create a Date object from dateAndTime
@@ -60,67 +80,78 @@ export default function NewEventsInfo() {
                     });
 
                     return (
-                        <div key={event._id} className=" bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:scale-105 duration-300">
+                        <div key={event._id} className=" ">
 
                             {/* Event Image */}
 
-                            <div className="relative 
-                            h-[275px] md:h-[290px]  w-full ">
+                          <div className="relative 
+                            h-[250px] md:h-[270px]  w-full ">
                                 <img
                                     src={event.eventImage || '/default-event-image.jpg'}
                                     alt="Event Image"
                                     className=" object-cover h-full w-full"
                                 />
+                          </div>
 
-                                <div className="absolute bottom-0 left-0 bg-gradient-to-t from-black via-transparent to-transparent w-full h-24"></div>
-                              </div>
-
-
-                                {/* Event details */}
-                    <div className="p-6">
+                              {/* Event Title */}
+                          <div className=" pt-10">
                       
-                      <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                      <h2 className="text-3xl font-bold text-gray-800 mb-2">
                         {event.eventTitle}
                       </h2>
+                          </div>
+                           
+                         {/**Event description */}
 
-                      <div className="flex items-center text-gray-600 space-x-4 mb-4" >
+                          <div className="border-b border-[#00332E] pt-4 pb-4">
+                      <p className="text-gray-700 text-wrap">{event.eventDescription}</p>
+                          </div>
 
-                      {/**date */}
-                      <div className="flex items-center">
-                        <FaCalendarAlt className="mr-2" />
-                        <span>{formattedDate}</span>
-                      </div>
+                          {/**det */}
+                          <div className="pt-6 flex flex-col text-gray-600  gap-2">
+                            {/**Date */}
+                            <div className="flex justify-start items-center gap-4">
+                              <FaCalendarAlt className="" />
+                              <span>{formattedDate}</span> 
+                            </div>
 
-                      {/**time */}
-                      <div className="flex items-center">
-                        <FaClock className="mr-2" />
-                        <span>{formattedTime}</span>
-                      </div>
+                            {/**Time */}
+                            <div className="flex justify-start items-center gap-4">
+                              <FaClock className="" />
+                              <span>{formattedTime}</span>
+                            </div>
 
-                      {/**location */}
-                      <div className="flex items-center">
-                        <FaMapMarkerAlt className="mr-2" />
-                        <span>{event.location}</span>
-                      </div>
+                            {/**Location */}
+                            <div className="flex justify-start items-center gap-4">
+                              <FaMapMarkerAlt className="" />
+                              <span>{event.location}</span>
+                            </div>
 
-                    </div>
+                            
 
-                      {/**Event description */}
-                    <p className="text-gray-700 mb-6">{event.eventDescription}</p>
 
-                    <div className="flex justify-between items-center">
+                          
+                          </div>
 
-                    <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                      Register
-                    </button>
-                    <Link href={`/events/${event._id}`} passHref 
-                    className="text-blue-500 hover:underline"
-                    >
-                      View Details
-                    </Link>
-                    </div>
+                        {/**View details button */}
+                          <button  
+                          className="text-gray-600 hover:text-blue-500 flex items-center mt-5"
+                          onClick={() => setSelectedEvent(event)}
+                          >
+                          <span className="text-sm hover:border-b hover:border-blue-500 flex items-center">
+                            View Details
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </span>
+                          </button>
+
+                
+
+
+                    <div>
                   </div>
-                </div>
+                  </div>
 
 
               );
@@ -129,7 +160,14 @@ export default function NewEventsInfo() {
         <p className="text-center text-gray-500">No events available.</p>
       )}
 
-    </div>
+        </div>
+         {/* Modal */}
+      {selectedEvent && (
+        <EventDetailsModal 
+          event={selectedEvent} 
+          onClose={() => setSelectedEvent(null)} // Close the modal
+        />
+      )}
 
     </div>
       </>
