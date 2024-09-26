@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { jwtVerify } from 'jose';
-import  jwt  from "jsonwebtoken";
+//import  jwt  from "jsonwebtoken";
 
 
 export const getDataFromToken = async (request: NextRequest) =>{
@@ -40,3 +40,5 @@ export const getDataFromToken = async (request: NextRequest) =>{
         
     }
 }
+
+// Server-side logic to clear the token cookie

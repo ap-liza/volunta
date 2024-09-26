@@ -4,6 +4,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import DeleteUser from "@/app/components/DeleteUser"
 
 export default function UserProfile({ params }: { params: { id: string } }) {
 
@@ -224,7 +225,11 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </button>
     </div>
 
-<button>Delete Account</button>
+            <div>
+                
+                    <DeleteUser id={params.id} />
+                
+            </div>
         
 
             

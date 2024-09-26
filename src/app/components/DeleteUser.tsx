@@ -14,6 +14,11 @@ interface DeleteUserProps {
     const router = useRouter()
     const [loading, setLoading] = useState(false);
 
+    // Function to delete the token cookie properly (for localhost)
+    const clearTokenCookie = () => {
+        document.cookie = "token=; Max-Age=0; path=/;";
+    };
+
     const deleteUser = async () =>{
         Swal.fire({
             title: 'Are you sure you want to delete your account',
@@ -32,9 +37,10 @@ interface DeleteUserProps {
                 const response = await axios.delete(`/api/users/deleteUser/${id}`);
                 if (response.status === 200) {
                   Swal.fire('Deleted!', response.data.message, 'success');
-                  // Refresh the page 
-                  //window.location.reload(); 
-                  router.refresh()
+                  
+                  
+                  
+                  router.push('/')
                 }
               } catch (error) {
                 Swal.fire('Error!', 'Failed to delete account', 'error');
@@ -48,7 +54,10 @@ interface DeleteUserProps {
     return(
         <button 
         onClick={deleteUser}
-        className="text-red-400">
+        className="text-red-400"
+        disabled={loading}
+        >
+           {loading ? 'Deleting...' : 'Delete Account'}
          <HiOutlineTrash size={24}/>
         </button>
      )
