@@ -61,12 +61,13 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         }
     };
 
+    //close modal
     const onClose = () => {
         setShowModal(false);
         setDeleteModal(false)
       };
     
-     // Handle file upload
+     // Handle image file upload
      const handleUpload = async () => {
         if (!selectedFile) {
             toast.error("Please select a file first");
@@ -179,7 +180,6 @@ export default function UserProfile({ params }: { params: { id: string } }) {
     }, [params.id])
 
   
-
      const getUserData = async ()=>{
         try {
             const res = await axios.get('/api/users/user1')
@@ -207,13 +207,12 @@ export default function UserProfile({ params }: { params: { id: string } }) {
      }, [])
 
 
-
     return (
 
         <>
 
         {/**Account */}
-        <div className="p-4">
+        <div className="p-4 border border-gray-500 rounded-lg mt-4">
             {/**Profile Picture */}
             <div className="flex flex-col gap-4">
                 <h1>Profile Picture</h1>
@@ -254,7 +253,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                 </div>
             </div>
         </div>
-</div>
+        </div>
 
 {/** */}
 <div className="flex flex-col gap-4 p-4 ">
