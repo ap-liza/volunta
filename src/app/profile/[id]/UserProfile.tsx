@@ -2,9 +2,20 @@
 'use client'
 
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import DeleteUser from "@/app/components/DeleteUser"
+import { ClipLoader } from 'react-spinners';
+
+//import Cropper from 'react-easy-crop';
+//import getCroppedImage from "@/helpers/getCroppedImage"
+//import Slider from '@mui/material/Slider';
+
+
+
+
+
+
 
 export default function UserProfile({ params }: { params: { id: string } }) {
 
@@ -12,11 +23,23 @@ export default function UserProfile({ params }: { params: { id: string } }) {
       const [firstName, setFirstName] = useState('')
       const [lastName, setLastName] = useState('')
       const [email, setEmail] = useState('')
-      const [savedProfilePic, setSavedProfilePic] = useState('')
+      const [bio, setBio] = useState<string>('')
+      const [skills, setSkills] = useState<string[]>([])
+     
 
     //profile picture state
+    const [savedProfilePic, setSavedProfilePic] = useState('')
     const [profilePic, setProfilePic] = useState<string>("/profile-default.png");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    // Editing state
+    const [isEditing, setIsEditing] = useState(false)
+
+    //modal state to get the confirmation of user to upload image
+    const [showModal, setShowModal] = useState(false); 
+
+     // upLoading image state
+     const [isLoading, setIsLoading] = useState(false);
 
     // Handle file selection
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,15 +50,25 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             // Show preview of selected file
             const previewURL = URL.createObjectURL(file);
             setProfilePic(previewURL);
+
+            setShowModal(true);
+
         }
     };
 
+    const onClose = () => {
+        setShowModal(false);
+      };
+    
      // Handle file upload
      const handleUpload = async () => {
         if (!selectedFile) {
             toast.error("Please select a file first");
             return;
         }
+
+        //set loading state to true
+        setIsLoading(true)
 
         const formData = new FormData();
         formData.append("file", selectedFile);
@@ -52,18 +85,35 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             if (res.data.imageUrl) {
                 // Update profile picture with the uploaded Cloudinary URL
                 setProfilePic(res.data.imageUrl);
+
+                onClose()
                 toast.success("Profile picture updated successfully");
             } else {
-                toast.error("Failed to upload profile picture");
+                toast.error("Failed to upload profile picture");            
             }
         } catch (error) {
             console.error("Error uploading file:", error);
             toast.error("Error uploading profile picture");
+        }finally{
+            setIsLoading(false)
         }
     };
 
+    // Handle canceling the upload
+    const handleCancelUpload = () => {
+        setSelectedFile(null);
+        setProfilePic(savedProfilePic || "/profile-default.png");
+        setShowModal(false);
+    };
 
-    //getting user details
+
+    //handle save user details
+    const handleSaveBioAndSkills = async()=>{
+
+    }
+ 
+
+    //fetch user details
     const [userData, setUserData] = useState<any>(null)
     //getting user id 
     useEffect(() => {
@@ -75,24 +125,23 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                 console.error('Failed to fetch user data:', error.message)
             }
         }
-
         fetchUserData()
     }, [params.id])
 
   
 
-     const getUSERName = async ()=>{
+     const getUserData = async ()=>{
         try {
             const res = await axios.get('/api/users/user1')
             console.log(res.data)
 
             const { _id, username, firstName, lastName, email,profilePicture } = res.data.data
 
-            setFirstName(res.data.data.firstName)
-
-            setLastName(res.data.data.lastName)
-
-            setEmail(res.data.data.email)
+            setFirstName(firstName)
+            setLastName(lastName)
+            setEmail(email)
+            setBio(bio || '')
+            setSkills(skills || [])
 
             setProfilePic((profilePicture || "/profile-default.png"))
 
@@ -104,19 +153,60 @@ export default function UserProfile({ params }: { params: { id: string } }) {
      }
 
      useEffect(()=>{
-        getUSERName()
+        getUserData()
      }, [])
 
 
 
     return (
-        <div className="flex flex-col gap-4 p-4 ">
-            {/** <h1>Profile of User {params.id}</h1>
-            <h1>Welcome, {firstName} {lastName}</h1>
-            <h1>Email:  {email}</h1>*/}
-            
-            
 
+        <>
+
+        {/**Account */}
+        <div className="p-4">
+            <div className="flex flex-col gap-4">
+                <h1>Profile Picture</h1>
+
+                <div className="flex flex-col md:flex-row items-center gap-6 ">
+
+                    <img 
+                    src={profilePic} 
+                    alt="Profile Picture" 
+                    className=" w-40 h-40 rounded-full object-cover border-2 border-gray-300"
+                    />
+
+                {/**photo buttons */}
+                <div className="flex gap-6">
+
+                     {/* changing the button text depeding on the availability of profile pic */}
+                     <label 
+                     className="py-2 px-4 bg-blue-500 text-white rounded-full cursor-pointer">
+                            {savedProfilePic ? 'Change Photo' : 'Add Photo'}
+                                <input
+                                    id="profile-pic-upload" 
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleFileChange}
+                                />
+                    </label>
+
+                     {/* Conditionally render the delete button */}
+                     {savedProfilePic && (
+                        <button
+                        className="py-2 px-4 bg-red-500 text-white rounded-full"
+                        >
+                            Delete Photo
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+</div>
+
+
+        <div className="flex flex-col gap-4 p-4 ">
+            
 <div className="flex flex-col md:flex-row justify-between border border-[#004D40] p-6 mt-[10px] rounded-[15px]">
 
 {/**profile picture and bio */}
@@ -152,8 +242,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             accept="image/*"
             onChange={handleFileChange}
             />
-        
-        </div>
+</div>
 
         {/**upload button */}
         <button
@@ -164,26 +253,90 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </button>
 
     </div>   
-        {/**name, location and bio */}
+        {/**User details */}
         <div className="flex flex-col gap-2">
                 <h1 
                 className="text-xl font-[500] ">{firstName} {lastName}
                 </h1>
 
-                <h1
-                className="text-slate-500"
-                >User Bio</h1>
+                <h1 className="text-slate-500">
+                    {bio}
+                </h1>
 
+                {isEditing ? (
+                            <textarea
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                className="p-2 border rounded"
+                                placeholder="Add your bio..."
+                            />
+                        ) : (
+                            <p>{bio || 'Bio: Add Bio'}</p>
+                        )}
 
                 <h1 className="text-sm"
-                >User Location</h1>
+                >User Availability </h1>
         </div>
     </div>
 {/**edit profile picture */}
    
         
 </div>
+<div className="mt-4">
+                <h3 className="font-semibold text-lg">Skills</h3>
 
+                {isEditing ? (
+                    <input
+                        type="text"
+                        value={skills.join(', ')}
+                        onChange={(e) => setSkills(e.target.value.split(', '))}
+                        className="p-2 border rounded"
+                        placeholder="Add your skills (comma-separated)..."
+                    />
+                ) : (
+                    <p>{skills.length ? skills.join(', ') : 'Skills: Add Skills'}</p>
+                )}
+
+                {/* Edit or Save button */}
+                {isEditing ? (
+                    <button
+                        onClick={handleSaveBioAndSkills}
+                        className="px-4 py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    >
+                        Save Changes
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => setIsEditing(true)}
+                        className="px-4 py-2 mt-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    >
+                        Edit Profile
+                    </button>
+                )}
+            </div>
+<div>
+
+</div>
+
+<div>
+<div className="flex flex-col gap-2">
+                        <h1 className="text-xl font-[500]">{firstName} {lastName}</h1>
+                        <h1 className="text-slate-500">User Bio</h1>
+
+                        {isEditing ? (
+                            <textarea
+                                value={bio}
+                                onChange={(e) => setBio(e.target.value)}
+                                className="p-2 border rounded"
+                                placeholder="Add your bio..."
+                            />
+                        ) : (
+                            <p>{bio || 'Bio: Add Bio'}</p>
+                        )}
+
+                        <h1 className="text-sm">User Location</h1>
+                    </div>
+</div>
 
 <div className="flex flex-col items-center bg-slate-500">
 
@@ -234,5 +387,80 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
             
         </div>
+
+
+
+
+
+        {/* Modal for confirmation */}
+        {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80  ">
+                    <div className="bg-white flex flex-col rounded-lg p-8 w-full max-w-sm md:max-w-2xl h-[80vh] gap-8">
+                        
+                        <div>
+                    
+                        {isLoading ? (
+                            <p className="text-center text-gray ">Uploading Picture.....</p>
+                        ):(
+                            <p className="text-center  font-semibold text-gray-600 text-lg">
+                            Upload Profile Picture
+                        </p>
+                        )}
+                           
+                        
+                           
+                        </div>
+                        
+                    {isLoading ?
+
+                    ( 
+                        <div className="flex justify-center mt-20">
+                            <ClipLoader color="#36d7b7" size={150} />
+                            
+                        </div>
+                    
+                        
+                    ):
+                    (
+                        <div>
+
+
+                        <img
+                            src={profilePic}
+                            alt="Preview"
+                            className="w-60 h-60 rounded-full object-cover border-2 border-gray-300 mx-auto mb-4"
+                        />
+
+                             <p className="text-center text-gray-600">Are you sure you want to upload this image?</p>
+                        <div className="flex justify-center gap-4 mt-6">
+                            <button
+                                className="py-2 px-4 bg-blue-500 text-white rounded-full"
+                                onClick={handleUpload}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                className="py-2 px-4 bg-gray-300 text-black rounded-full"
+                                onClick={handleCancelUpload}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        </div>
+                       
+
+                        
+                        
+                    ) }
+                        
+                       
+                    </div>
+                </div>
+        )}
+        
+        
+         
+        
+        </>
     )
 }

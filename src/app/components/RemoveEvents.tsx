@@ -1,7 +1,7 @@
 'use client'
 import { HiOutlineTrash } from "react-icons/hi"
 import axios from 'axios';
-import toast from "react-hot-toast";
+//import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -38,8 +38,8 @@ export default function RemoveEvents({ id }: RemoveEventsProps){
               if (response.status === 200) {
                 Swal.fire('Deleted!', response.data.message, 'success');
                 // Refresh the page 
-                //window.location.reload(); 
-                router.refresh()
+                window.location.reload(); 
+                //router.refresh()
               }
             } catch (error) {
               Swal.fire('Error!', 'Failed to delete event', 'error');

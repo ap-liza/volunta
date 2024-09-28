@@ -27,6 +27,26 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please provide a password'],
     },
+
+    bio: {
+        type: String,
+        default: '', 
+    },
+      // List of skills as an array of strings
+    skills: {
+        type: [String], 
+        default: []
+    },
+    // Array of user interests
+    interests: {
+        type: [String], 
+        default: [],
+    },
+    // Could store a string like "weekends" or a more structured object
+    availability: {
+        type: String, 
+        default: 'Not specified',
+      },
     isVerified:{
         type: Boolean,
         default: false

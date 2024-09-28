@@ -41,7 +41,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ event, onClose })
 {/**Modal content */}
         {/* Event Image */}
 
-    <div className="max-h-[80vh] overflow-y-scroll p-4">
+    <div className="max-h-[75vh] overflow-y-scroll p-4">
     
         <img 
           src={event.eventImage || '/default-event-image.jpg'} 
