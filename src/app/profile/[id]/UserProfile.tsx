@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
+
 import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -19,7 +20,10 @@ import { ClipLoader } from 'react-spinners';
 
 export default function UserProfile({ params }: { params: { id: string } }) {
 
+        
+
     //getting users details on rendering
+      const [userId, setUserId] = useState('')
       const [firstName, setFirstName] = useState('')
       const [lastName, setLastName] = useState('')
       const [email, setEmail] = useState('')
@@ -37,6 +41,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
     //modal state to get the confirmation of user to upload image
     const [showModal, setShowModal] = useState(false); 
+    const [deleteModal, setDeleteModal] = useState(false)
 
      // upLoading image state
      const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +63,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
     const onClose = () => {
         setShowModal(false);
+        setDeleteModal(false)
       };
     
      // Handle file upload
@@ -88,6 +94,8 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
                 onClose()
                 toast.success("Profile picture updated successfully");
+
+                window.location.reload()
             } else {
                 toast.error("Failed to upload profile picture");            
             }
@@ -105,6 +113,48 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         setProfilePic(savedProfilePic || "/profile-default.png");
         setShowModal(false);
     };
+
+   
+    // Handle delete photo
+    const handleDelete =()=>{
+        setDeleteModal(true)
+    } 
+
+    //delete Photo Function
+    const deletePhoto = async()=>{
+
+       
+        setIsLoading(true)
+
+        try{
+
+            const response = await axios.delete(`/api/users/deleteProfilePicture/${userId}`);
+            if (response.status === 200) {
+                console.log('Picture Deleted')
+
+                
+                onClose()
+
+                toast.success('Profile Picture has been deleted')
+
+                window.location.reload()
+
+            }
+
+        }catch(error:any){
+            console.log('error', error)
+            toast.error('An error occured whiles deleting Profile Picture')
+        }finally{
+            setIsLoading(false)
+        }
+
+    }
+
+
+    //handle canceling deletion
+     const handleCancelDelete =()=>{
+        setDeleteModal(false)
+    }
 
 
     //handle save user details
@@ -136,7 +186,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             console.log(res.data)
 
             const { _id, username, firstName, lastName, email,profilePicture } = res.data.data
-
+            setUserId(_id)
             setFirstName(firstName)
             setLastName(lastName)
             setEmail(email)
@@ -164,6 +214,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
         {/**Account */}
         <div className="p-4">
+            {/**Profile Picture */}
             <div className="flex flex-col gap-4">
                 <h1>Profile Picture</h1>
 
@@ -195,6 +246,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                      {savedProfilePic && (
                         <button
                         className="py-2 px-4 bg-red-500 text-white rounded-full"
+                        onClick={handleDelete}
                         >
                             Delete Photo
                         </button>
@@ -204,8 +256,8 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </div>
 </div>
 
-
-        <div className="flex flex-col gap-4 p-4 ">
+{/** */}
+<div className="flex flex-col gap-4 p-4 ">
             
 <div className="flex flex-col md:flex-row justify-between border border-[#004D40] p-6 mt-[10px] rounded-[15px]">
 
@@ -386,13 +438,14 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         
 
             
-        </div>
+</div>
 
 
 
 
 
-        {/* Modal for confirmation */}
+
+        {/* Modal for upload confirmation */}
         {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80  ">
                     <div className="bg-white flex flex-col rounded-lg p-8 w-full max-w-sm md:max-w-2xl h-[80vh] gap-8">
@@ -457,7 +510,73 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                     </div>
                 </div>
         )}
-        
+
+        {/**Modal for delete confirmation */}
+        {deleteModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80  ">
+                    <div className="bg-white flex flex-col rounded-lg p-8 w-full max-w-sm md:max-w-2xl h-[80vh] gap-8">
+                        
+                        <div>
+                    
+                        {isLoading ? (
+                            <p className="text-center text-gray ">Deleting Picture.....</p>
+                        ):(
+                            <p className="text-center  font-semibold text-gray-600 text-lg">
+                            Delete Profile Picture
+                        </p>
+                        )}
+                           
+                        
+                           
+                        </div>
+                        
+                    {isLoading ?
+
+                    ( 
+                        <div className="flex justify-center mt-20">
+                            <ClipLoader color="#36d7b7" size={150} />
+                            
+                        </div>
+                    
+                        
+                    ):
+                    (
+                        <div>
+
+
+                        <img
+                            src={profilePic}
+                            alt="Preview"
+                            className="w-60 h-60 rounded-full object-cover border-2 border-gray-300 mx-auto mb-4"
+                        />
+
+                             <p className="text-center text-gray-600">Are you sure you want to delete this image?</p>
+                        <div className="flex justify-center gap-4 mt-6">
+                            <button
+                                className="py-2 px-4 bg-blue-500 text-white rounded-full"
+                                onClick={deletePhoto}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                className="py-2 px-4 bg-gray-300 text-black rounded-full"
+                                onClick={handleCancelDelete}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                        </div>
+                       
+
+                        
+                        
+                    ) }
+                        
+                       
+                    </div>
+                </div>
+        )}
+
         
          
         
