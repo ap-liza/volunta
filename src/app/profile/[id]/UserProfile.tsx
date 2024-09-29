@@ -26,6 +26,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
       const [userId, setUserId] = useState('')
       const [firstName, setFirstName] = useState('')
       const [lastName, setLastName] = useState('')
+      const [username, setUserName] = useState('')
       const [email, setEmail] = useState('')
       const [bio, setBio] = useState<string>('')
       const [skills, setSkills] = useState<string[]>([])
@@ -161,6 +162,24 @@ export default function UserProfile({ params }: { params: { id: string } }) {
     //handle save user details
     const handleSaveBioAndSkills = async()=>{
 
+        try {
+            const updatedUser = {
+                username,
+                bio,
+                skills,
+            };
+    
+            const res = await axios.put(`/api/users/updateUserData/${userId}`, updatedUser);
+    
+            if (res.status === 200) {
+                toast.success('Profile updated successfully');
+                setIsEditing(false); 
+                
+            }
+        } catch (error: any) {
+            console.error('Error updating profile:', error);
+            toast.error('An error occurred while saving');
+        }
     }
  
 
@@ -185,10 +204,11 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             const res = await axios.get('/api/users/user1')
             console.log(res.data)
 
-            const { _id, username, firstName, lastName, email,profilePicture } = res.data.data
+            const { _id, username, firstName, lastName, email,profilePicture,bio, skills } = res.data.data
             setUserId(_id)
             setFirstName(firstName)
             setLastName(lastName)
+            setUserName(username)
             setEmail(email)
             setBio(bio || '')
             setSkills(skills || [])
@@ -212,6 +232,9 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         <>
 
         {/**Account */}
+
+        {/**Picture */}
+
         <div className="p-4 border border-gray-500 rounded-lg mt-4">
             {/**Profile Picture */}
             <div className="flex flex-col gap-4">
@@ -255,98 +278,141 @@ export default function UserProfile({ params }: { params: { id: string } }) {
         </div>
         </div>
 
-{/** */}
-<div className="flex flex-col gap-4 p-4 ">
-            
-<div className="flex flex-col md:flex-row justify-between border border-[#004D40] p-6 mt-[10px] rounded-[15px]">
+        {/**Account info */}
 
-{/**profile picture and bio */}
-    <div className="flex justify-center items-center gap-4">
-    
-    <div className="flex flex-col">
-        {/**profile picture*/}
+        <div className="p-4 border border-gray-500 rounded-lg mt-4">
+            {/**name and email */}
+            <div className="flex flex-col md:flex-row justify-between p-4 gap-6 md:gap-4">
+                {/**first name */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                    className="text-gray-600"
+                    >First Name
+                    </label>
+                    <input 
+                    className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                    type="text"
+                    value={firstName}
+                    disabled
+                    />
+                </div>
+                    {/**last name */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                     className="text-gray-600"
+                    >Last Name</label>
+                    <input 
+                    type="text"
+                    className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                    value={lastName}
+                    disabled
+                    />
+                </div>
+                {/**email */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                     className="text-gray-600"
+                    >Email</label>
+                    <input 
+                    type="text"
+                    className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                    value={email}
+                    disabled
+                    />
+                </div>
+                
+               
+            </div>
 
-        <div className="relative">
+            {/**editable username, bio and interests */}
 
-        
-        <img 
-            src={profilePic} 
-            alt="Profile Picture" 
-            className="w-40 h-40 rounded-full object-cover border-2 border-gray-300"
-        />
+            <div className="flex flex-col md:flex-row justify-between p-4 gap-6 md:gap-4">
 
-        <label 
-            htmlFor="profile-pic-upload" 
-            className="absolute mt-[-2px] bottom-0 right-0 bg-[#FF6F61] p-2 rounded-full cursor-pointer w-10 h-10 hover:bg-[#C7A500]"
-            >
-            <svg className="w-6 h-6 text-[#F9F7F7] " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12.293 2.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.707.293H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l9-9z" />
-            <path d="M6 14a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H6z" />
-            </svg>
-            </label>
+                {/**username */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                    className="text-gray-600"
+                    >username
+                    </label>
+                    {isEditing ? (
+                            <input
+                                value={username}
+                                onChange={(e) => setUserName(e.target.value)}
+                                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                                placeholder=""
+                            />
+                        ) : (
+                            <input 
+                            type="text"
+                            className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                            value={username}
+                            disabled
+                            />
+                            
+                        )}
+                </div>
 
-            
-            <input 
-            id="profile-pic-upload" 
-            type="file" 
-            className="hidden" 
-            accept="image/*"
-            onChange={handleFileChange}
-            />
-</div>
 
-        {/**upload button */}
-        <button
-           onClick={handleUpload}
-            className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 mt-2"
-        >
-            Upload picture
-        </button>
 
-    </div>   
-        {/**User details */}
-        <div className="flex flex-col gap-2">
-                <h1 
-                className="text-xl font-[500] ">{firstName} {lastName}
-                </h1>
-
-                <h1 className="text-slate-500">
-                    {bio}
-                </h1>
-
-                {isEditing ? (
+                
+                {/**Bio */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                    className="text-gray-600"
+                    >Bio
+                    </label>
+                    {isEditing ? (
                             <textarea
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
-                                className="p-2 border rounded"
+                                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
                                 placeholder="Add your bio..."
                             />
                         ) : (
-                            <p>{bio || 'Bio: Add Bio'}</p>
+                            <input 
+                            type="text"
+                            className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                            value={bio}
+                            disabled
+                            />
+                            
                         )}
+                </div>
 
-                <h1 className="text-sm"
-                >User Availability </h1>
+                
+                {/**interests */}
+                <div className="flex flex-col gap-2">
+                    <label htmlFor=""
+                    className="text-gray-600"
+                    >Interests
+                    </label>
+                    {isEditing ? (
+                            <textarea
+                                value={skills.join(', ')}
+                                onChange={(e) => setSkills(e.target.value.split(', '))}
+                                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                                placeholder="Add your interests separated by comma's..."
+                            />
+                        ) : (
+                            <input 
+                            type="text"
+                            className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
+                            value={skills.length ? skills.join(', ') : ' Add Interests'}
+                            disabled
+                            />
+                            
+                        )}
+                </div>
+            </div>
+
         </div>
-    </div>
-{/**edit profile picture */}
-   
-        
-</div>
-<div className="mt-4">
-                <h3 className="font-semibold text-lg">Skills</h3>
 
-                {isEditing ? (
-                    <input
-                        type="text"
-                        value={skills.join(', ')}
-                        onChange={(e) => setSkills(e.target.value.split(', '))}
-                        className="p-2 border rounded"
-                        placeholder="Add your skills (comma-separated)..."
-                    />
-                ) : (
-                    <p>{skills.length ? skills.join(', ') : 'Skills: Add Skills'}</p>
-                )}
+        {/**eDIT AND SAVE CHANGES BUTTON */}
+
+        <div className="mt-4 flex justify-center md:justify-end">
+
+           
+                
 
                 {/* Edit or Save button */}
                 {isEditing ? (
@@ -364,80 +430,31 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                         Edit Profile
                     </button>
                 )}
-            </div>
-<div>
-
-</div>
-
-<div>
-<div className="flex flex-col gap-2">
-                        <h1 className="text-xl font-[500]">{firstName} {lastName}</h1>
-                        <h1 className="text-slate-500">User Bio</h1>
-
-                        {isEditing ? (
-                            <textarea
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                                className="p-2 border rounded"
-                                placeholder="Add your bio..."
-                            />
-                        ) : (
-                            <p>{bio || 'Bio: Add Bio'}</p>
-                        )}
-
-                        <h1 className="text-sm">User Location</h1>
-                    </div>
-</div>
-
-<div className="flex flex-col items-center bg-slate-500">
-
-                {/**Profile Picture */}
-        <div className="relative">
-
-            <img 
-                
-                 src={profilePic} 
-                 alt="Profile Picture" 
-                 className="w-32 h-32 rounded-full object-cover border-2 border-gray-300"
-            />
-            
-            <label 
-            htmlFor="profile-pic-upload" className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full cursor-pointer"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M4 5a2 2 0 012-2h8a2 2 0 012 2v2h2a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V7a2 2 0 012-2h2V5zm3 0V4a1 1 0 012 0v1h4V4a1 1 0 012 0v1h1v2H3V5h1z" />
-                </svg>
-            </label>
-
-            
-            <input 
-            id="profile-pic-upload" 
-            type="file" 
-            className="hidden" 
-            accept="image/*"
-            onChange={handleFileChange}
-            />
+    
         </div>
 
-        {/**upload button */}
+        {/**delete account button */}
+        <div className="flex justify-center mt-10">
+            <DeleteUser id={params.id} />
+        </div>
 
-        <button
-           onClick={handleUpload}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-            Upload picture
-        </button>
-    </div>
 
-            <div>
-                
-                    <DeleteUser id={params.id} />
-                
-            </div>
-        
+
+
 
             
-</div>
+
+
+
+
+
+
+
+
+          
+
+            
+
 
 
 
