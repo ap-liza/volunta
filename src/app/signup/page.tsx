@@ -98,7 +98,7 @@ const togglePassword =()=>{
                             wrapperClass=""
                         />
                     ) : (
-                        'Sign Up'
+                        'Sign Up as a Volunteer'
                     )}
                 </h1>
 

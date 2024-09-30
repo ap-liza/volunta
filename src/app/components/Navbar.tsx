@@ -13,9 +13,11 @@ export default function Navbar() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  //const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const [clicks, setClicks] = useState(false)
+
+  const [isSignInDropdownOpen, setIsSignInDropdownOpen] = useState(false);
 
   const toggleMenuBar =()=>{
     setClicks(!clicks)
@@ -29,6 +31,11 @@ export default function Navbar() {
   const closeSearch = () => {
     setIsSearchOpen(false);
   };
+
+  const toggleSignInDropdown = () => {
+    setIsSignInDropdownOpen(!isSignInDropdownOpen);
+  };
+
   
 
   return (
@@ -50,7 +57,11 @@ export default function Navbar() {
 
             <li><Link className="li relative text-[#F9F7F7]" href='/'>Contact</Link></li>
 
-            <li><Link className="li relative text-[#F9F7F7] " href='/login'>Sign in</Link></li>
+            <li><Link className="li relative text-[#F9F7F7] " href='/organizationlogin'>Sign in as an organization</Link></li>
+
+            <li><Link className="li relative text-[#F9F7F7] " href='/login'>Sign in as a volunteer</Link></li>
+
+            
           </ul>
 
           
@@ -149,7 +160,9 @@ export default function Navbar() {
 
         <li><Link className="li mob relative" href='/'>Contact</Link></li>
 
-        <li><Link className="li mob relative" href='/login'>Sign in</Link></li>
+        <li><Link className="li mob relative" href='/organizationlogin'>Sign in as an organization</Link></li>
+
+        <li><Link className="li mob relative" href='/login'>Sign in as a volunteer</Link></li>
       </ul>
 
       </div>

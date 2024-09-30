@@ -1,5 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
-"use client";
+
+'use client'
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,10 +12,10 @@ import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-sv
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 import { ThreeDots } from 'react-loader-spinner';
 
+
 export default function LoginPage(){
 
-    
-    const [user,setUser] = useState({
+    const [organization,setOrganization] = useState({
         email: '',
         password: '',
     })
@@ -23,17 +25,26 @@ export default function LoginPage(){
     const [buttonDisabled, setButtonDisabled] = React.useState(false)
     //showing process
     const [loading, setLoading] = React.useState(false)
+    //toggle password visibility for the user
+    const [userPassword, setUserPassword] = useState({password:''})
+
+    const [showUserPassword, setShowUserPassword] = useState(false)
+
+    const togglePassword =()=>{
+        setShowUserPassword((prevState) => !prevState);
+    }
 
     //log in logic
     const onLogin = async()=>{
         try{
             setLoading(true)
-            const response = await axios.post('/api/users/login', user)
+            const response = await axios.post('/api/organization/login', organization)
             // Extract the userId from the response (make sure it's returned from your API)
-            const userId = response.data.userId;
+            const organizationId = response.data.organizationId;
 
             toast.success('Login successful')
-            router.push(`/events/${userId}`)
+            router.push('/organizationdashboard')
+            //router.push(`/events/${organizationId}`)
         }
         catch(error:any){
             console.log('Login failed', error.message)
@@ -45,23 +56,7 @@ export default function LoginPage(){
     }
 
 
-    useEffect(()=>{
-        if(user.email.length > 0 && user.password.length ){
-            setButtonDisabled(false)
-        } 
-        else setButtonDisabled(true)
-    }, [user])
 
-
-    //toggle password visibility for the user
-    const [userPassword, setUserPassword] = useState({password:''})
-
-    const [showUserPassword, setShowUserPassword] = useState(false)
-
-    const togglePassword =()=>{
-        setShowUserPassword((prevState) => !prevState);
-    }
-    
     return(
         <div className="">
             {/** <h1 className="text-center p-20 text-3xl text-[#F9F7F7] bg-[#004D40] font-bold"> VOLUNTA</h1> */}
@@ -78,7 +73,7 @@ export default function LoginPage(){
 
                     <p className="text-[#F9F7F7] font-thin text-center">
                     
-                     Where your impact matters. Sign in to unlock new opportunities and continue your volunteering journey . 
+                     Where your impact matters. Sign in to connect with volunteers and achieve your cause. 
                     </p>
 
 {/**footer */}
@@ -113,18 +108,16 @@ export default function LoginPage(){
                             wrapperClass=""
                         />
                     ) : (
-                        'Sign in as Volunteer'
+                        'Sign in as an Organization'
                     )}
                 </h1>
 
-                
-                    
 {/**email */}
     <div className="relative  bg-gray-100">
         <input
             type="email"
-            value={user.email}
-            onChange={(e)=>setUser({...user,email:e.target.value})}
+            value={organization.email}
+            onChange={(e)=>setOrganization({...organization,email:e.target.value})}
             id="floating_input"
             className="block px-4 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-transparent  border-b-4 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#004D40] peer"
             placeholder=" "
@@ -143,8 +136,8 @@ export default function LoginPage(){
       <input
        type={showUserPassword ? 'text' : 'password'}
        id="floating_input"
-       value={user.password}
-       onChange={(e)=>setUser({...user,password:e.target.value})}
+       value={organization.password}
+       onChange={(e)=>setOrganization({...organization,password:e.target.value})}
         className="block px-4 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-transparent  border-b-4 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#004D40] peer"
         placeholder=" "
       />
@@ -155,7 +148,7 @@ export default function LoginPage(){
         Password
       </label>
 
-      {user.password && (
+      {organization.password && (
         <button
           type="button"
           onClick={togglePassword}
@@ -182,7 +175,7 @@ export default function LoginPage(){
             Google
         </button>
 
-                    <Link href='/signup' className="text-center text-sm hover:underline text-[#004D40]">Don't have an account? Sign Up
+                    <Link href='/organizationSignUp' className="text-center text-sm hover:underline text-[#004D40]">Don't have an account? Sign Up
                     </Link>
 
                    

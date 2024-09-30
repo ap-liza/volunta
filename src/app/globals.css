@@ -33,7 +33,7 @@ body{
 }
 
 .li{
-  letter-spacing: 0.2rem;
+
 }
 .li::before{
   content: '';
