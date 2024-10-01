@@ -40,11 +40,11 @@ export default function LoginPage(){
             setLoading(true)
             const response = await axios.post('/api/organization/login', organization)
             // Extract the userId from the response (make sure it's returned from your API)
-            const organizationId = response.data.organizationId;
+            const userId = response.data.organizationId;
 
             toast.success('Login successful')
-            router.push('/organizationdashboard')
-            //router.push(`/events/${organizationId}`)
+            router.push(`/organizationdashboard/events/${userId}`)
+            //router.push(`/events/${organizationId}`
         }
         catch(error:any){
             console.log('Login failed', error.message)

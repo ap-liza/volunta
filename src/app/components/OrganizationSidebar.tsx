@@ -27,13 +27,16 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     };
 
     //getting the user id
-    const [userId, setUserId] = useState<string | null>(null);
-
+    const [userId, setUserId] = useState('');
+/** 
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const res = await axios.get('/api/users/user1');
-                setUserId(res.data.data._id);
+                const res = await axios.get('/api/organization/organizations');
+                console.log('fetching data', res.data)
+                const organizationId = res.data.data._id; 
+                
+                //setUserId(organizationId);
             } catch (error:any) {
                 console.error('Failed to fetch user ID:', error.message);
                 toast.error('failed to fetch user id')
@@ -42,12 +45,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
         fetchUserId();
     }, []);
-
+*/
     //log out user
     const logout =async ()=>{
         try{
 
-            await axios.get('/api/users/logout')
+            await axios.get('/api/organization/logout')
 
             toast.success('logout success')
 
@@ -66,14 +69,17 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     
     const getUserDetails = async () => {
         try {
-            const res = await axios.get('/api/users/user1')
-            console.log(res.data)
-            const { firstName, profilePicture } = res.data.data
-            setUserName(firstName)
+            const res = await axios.get('/api/organization/organizations')
+            //console.log(res.data)
+            const { _id, name } = res.data.data
+            setUserName(name)
+            setUserId(_id)
             setProfilePicture((profilePicture || '/profile-default.png'))
+
+            console.log('fetched user id', _id)
         } catch (error: any) {
-            console.error('Failed to fetch user details:', error.message)
-            toast.error('Failed to load user details')
+            console.error('Failed to fetch organization details:', error.message)
+            toast.error('Failed to fetch organization details')
         }
     }
 
@@ -106,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           {/**IMAGE */}
           <div>
             <img
-              src={profilePicture}
+              src='/profile-default.png'
               alt="profile"
               className="w-[50px] h-[50px] overflow-hidden rounded-full shadow-lg"
               
@@ -123,12 +129,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             {/**uPCOMING EVENTS events */}
             <li 
             className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
-              isActive(userId ? `/events/${userId}` : '/events') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+              isActive(userId ? `/organizationdashboard/events/${userId}` : '/events') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
             } text-[#F9F7F7]`}
              >
               {/**icon */}
               <Link 
-               href={userId ? `/events/${userId}` : '/events'}
+               href={userId ? `/organizationdashboard/events/${userId}` : '/events'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -147,24 +153,27 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </Link>
 
               <Link 
-               href={userId ? `/events/${userId}` : '/profile'}
+               href={userId ? `/organizationdashboard/events/${userId}` : '/profile'}
               className='hidden md:block'
               >Upcoming Events
               </Link>
             </li>
 
 
-            {/**Post a new event
+
+
+
+            {/**Post a new event */}
             <li 
              className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
-              isActive(userId ? `/newevents/${userId}` : '/newevents') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+              isActive(userId ? `/organizationdashboard/newevents/${userId}` : '/newevents') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
             } text-[#F9F7F7]`}
             >
               
               
-              
+              {/**icon */}
               <Link
-               href={userId ? `/newevents/${userId}` : '/newevents'}
+               href={userId ? `/organizationdashboard/newevents/${userId}` : '/newevents'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -183,25 +192,24 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </Link>
 
               <Link 
-               href={userId ? `/newevents/${userId}` : '/newevents'}
+               href={userId ? `/organizationdashboard/newevents/${userId}` : '/newevents'}
               
               className='hidden md:block'
               >
                 Post a New Event
               </Link>
             </li>
-             */}
 
             {/**Activity */}
             <li 
             className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
-              isActive(userId ? `/activity/${userId}` : '/activity') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+              isActive(userId ? `/organizationdashboard/activity/${userId}` : '/activity') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
             } text-[#F9F7F7]`}
             >
 
               {/**icon */}
               <Link
-               href={userId ? `/activity/${userId}` : '/activity'}
+               href={userId ? `/organizationdashboard/activity/${userId}` : '/activity'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -220,9 +228,46 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </Link>
 
               <Link 
-              href={userId ? `/activity/${userId}` : '/activity'}
+              href={userId ? `/organizationdashboard/activity/${userId}` : '/activity'}
               className='hidden md:block'
               >Activity</Link>
+            </li>
+
+            {/**Volunteer */}
+            
+             <li 
+            className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
+              isActive(userId ? `/organizationdashboard/volunteers/${userId}` : '/activity') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+            } text-[#F9F7F7]`}
+            >
+
+              {/**icon */}
+              <Link
+               href={userId ? `/organizationdashboard/volunteers/${userId}` : ''}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="100"
+                  height="80"
+                  viewBox="0 0 64 64"
+                  className='w-8 h-8 mr-'
+                  >
+                  <g fill="#F9F7F7">
+                    <path d="M10 36c-3.3 0-6 2.7-6 6v8h12v-8c0-3.3-2.7-6-6-6zM20 30c2.2 0 4 1.8 4 4v10h-8v-10c0-2.2 1.8-4 4-4zM32 36c-3.3 0-6 2.7-6 6v8h12v-8c0-3.3-2.7-6-6-6zM42 30c2.2 0 4 1.8 4 4v10h-8v-10c0-2.2 1.8-4 4-4zM54 36c-3.3 0-6 2.7-6 6v8h12v-8c0-3.3-2.7-6-6-6z" />
+                    <circle cx="10" cy="26" r="6" />
+                    <circle cx="32" cy="26" r="6" />
+                    <circle cx="54" cy="26" r="6" />
+                  </g>
+                </svg>
+               
+                
+              </Link>
+
+              <Link 
+              href={userId ? `/organizationdashboard/volunteers/${userId}` : ''}
+              className='hidden md:block'
+              >Volunteers
+              </Link>
             </li>
 
             {/**Account */}
@@ -234,7 +279,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               {/**icon */}
 
               <Link 
-              href={userId ? `/profile/${userId}` : '/profile'}
+              href={userId ? `/organizationdashboard/profile/${userId}` : '/profile'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +370,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
         
          
-         <Searchbar/> 
+         <Searchbar />  
         
          
 

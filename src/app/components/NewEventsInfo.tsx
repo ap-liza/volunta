@@ -10,6 +10,7 @@ import axios from "axios";
 import { FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClock, FaBook, FaPhone } from 'react-icons/fa';
 import EventDetailsModal from "./EventsDetailsModal";
 
+
 interface EventType {
   _id: string;
   eventTitle: string;
@@ -31,7 +32,7 @@ interface EventType {
 // Client-side component to display events
 export default function NewEventsInfo() {
 
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<EventType[]>([]);
 
     //modal
     const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null); // Use EventType for selected event
@@ -60,9 +61,14 @@ export default function NewEventsInfo() {
   
   return (
     <>
+    <div className="flex justify-center w-[250px]">
+   
+    </div>
+   
     <div className="min-h-screen ">
 
    
+    
         <div className=" grid grid-cols-1 md:grid-cols-3 gap-6 py-8">
             {events.length > 0 ? (
                 events.map((event: any) => {
