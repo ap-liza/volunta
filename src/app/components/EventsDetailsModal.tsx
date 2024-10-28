@@ -25,6 +25,25 @@ interface EventDetailsModalProps {
 const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ event, onClose }) => {
   if (!event) return null; // Do not render if no event is selected
 
+  const eventDate = new Date(event.dateAndTime);
+  const formattedDate = eventDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+    });
+  const formattedTime = eventDate.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+    });
+  
+    const eventDeadline = new Date (event.deadline)
+    const formattedDeadline = eventDeadline.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+      });
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white p-[50px] rounded-lg w-full max-w-md md:max-w-2xl  relative">
@@ -72,13 +91,13 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ event, onClose })
           <div className="flex items-center gap-2">
             {/**<FaCalendarAlt /> */}
             <h2 className='font-bold'>Date: </h2>
-            <span>{new Date(event.dateAndTime).toLocaleDateString()}</span>
+            <span>{formattedDate}</span>
           </div>
 
           <div className="flex items-center gap-2">
             {/** <FaClock /> */}
             <h2 className='font-bold'>Time: </h2>
-            <span>{new Date(event.dateAndTime).toLocaleTimeString()}</span>
+            <span>{formattedTime}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -99,7 +118,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ event, onClose })
 
           <div className="flex items-center gap-2">
             <h2 className='font-bold'>Deadline for Registration: </h2>
-            <span>{new Date(event.deadline).toLocaleDateString()}</span>
+            <span>{formattedDeadline}</span>
           </div>
 
           <div className="flex items-center gap-2">
