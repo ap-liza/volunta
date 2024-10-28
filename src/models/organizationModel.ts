@@ -22,7 +22,10 @@ const organizationSchema = new mongoose.Schema({
         type: String,
         default:'' 
     },
-
+    profilePicture :{
+        type:String,
+        default:''
+    },
     website: { 
         type: String, 
         default:''
@@ -47,8 +50,14 @@ const organizationSchema = new mongoose.Schema({
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,
     verifyTokenExpiry: Date,
-    createdAt: { type: Date, default: Date.now },
-    isVerified: { type: Boolean, default: false },
+    createdAt: { 
+        type: Date, 
+        default: Date.now 
+    },
+    isVerified: { 
+        type: Boolean, 
+        default: false 
+    },
 })
 
 const Organization = mongoose.models.organizations || mongoose.model("organizations", organizationSchema)

@@ -32,20 +32,21 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '', 
     },
+    
       // List of skills as an array of strings
     skills: {
         type: [String], 
         default: []
     },
-    // Array of user interests
+    // list of user interests
     interests: {
         type: [String], 
         default: [],
     },
-    // Could store a string like "weekends" or a more structured object
+
     availability: {
         type: String, 
-        default: 'Not specified',
+        default: '',
       },
     isVerified:{
         type: Boolean,
@@ -57,7 +58,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePicture: {
         type: String,
-        default: ''  // Optional: can leave it empty initially
+        default: '' 
     },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,

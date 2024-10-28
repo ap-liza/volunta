@@ -32,7 +32,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         const { id } = params;
 
         const body = await request.json();
-        const { bio, skills, username } = body;
+        const { bio, skills, username, interests, availability } = body;
 
         const user = await User.findById(id);
 
@@ -42,7 +42,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         }
 
         if (bio) user.bio = bio;
+        //if (availability) user.availability = availability;
         if (skills) user.skills = skills;
+        if (interests) user.interests = interests;
         if (username) user.username = username;
 
         await user.save();

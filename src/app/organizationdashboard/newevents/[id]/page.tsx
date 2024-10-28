@@ -13,12 +13,12 @@ export default function NewEventPage({ params }: { params: { id: string } }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulating a network request or data loading
+        
         const timer = setTimeout(() => {
-          setLoading(false); // After the timeout, set loading to false
-        }, 2000); // Adjust timing based on real data fetching
+          setLoading(false);
+        }, 2000); // 
     
-        return () => clearTimeout(timer); // Cleanup the timer when the component unmounts
+        return () => clearTimeout(timer); 
       }, []);
     return (
         <OrganizationDashboardLay>

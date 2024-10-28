@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
         const contact = formData.get('contact');
         const deadline = formData.get('deadline');
         const organizerName = formData.get('organizerName');
+        const questions = formData.getAll('questions')
         
     
 
@@ -84,7 +85,8 @@ export async function POST(request: NextRequest) {
             contact,
             deadline,
             organizerName,
-            userId
+            userId,
+            questions
             
             
         });

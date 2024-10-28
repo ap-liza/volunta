@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 //creating the event info databse in mongodb
 const eventSchema = new mongoose.Schema(
     {
@@ -33,7 +34,7 @@ const eventSchema = new mongoose.Schema(
     },
     eventImage: {
         type: String,
-        default: ''  // Optional: can leave it empty initially
+        default: ''
     },
     deadline:{
         type: Date,
@@ -44,13 +45,37 @@ const eventSchema = new mongoose.Schema(
         required: [true, 'Please provide the name of the organizer']
 
     },
-    // Adding a reference to the User model
+    // Adding a reference to the Organization model
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'users', 
-        required: true }
+        ref: 'organizations', 
+        required: true 
+    },
+    questions: { 
+        type: [String], 
+        default:[],
+    } ,
+    registrations: [{
+        uSerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users',
+            required: true
+        },
+        status: {
+            type: String,
+            enum: ['pending', 'accepted', 'rejected'],
+            default: 'pending'
+        },
+        registrationDate: {
+            type: Date,
+            default: Date.now
+        }
+    }] ,
+    
     
 },
+//registrations for users:
+    
 {
     timestamps: true,
 }

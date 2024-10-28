@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
 
             toast.success('logout success')
 
-            router.push('/login')
+            router.push('/organizationlogin')
 
         }catch(error:any){
             console.log(error.message)
@@ -273,7 +273,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             {/**Account */}
             <li 
              className={`h-[44px] rounded-[8px] flex justify-start items-center p-[25px] md:p-[10px] gap-[12px] ${
-              isActive(userId ? `/profile/${userId}` : '/profile') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
+              isActive(userId ? `/organizationdashboard/profile/${userId}` : '/profile') ? 'bg-[#00332E]' : 'hover:bg-[#00332E]'
             } text-[#F9F7F7]`}
             >
               {/**icon */}
@@ -297,7 +297,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 </svg>
               </Link>
 
-              <Link href={userId ? `/profile/${userId}` : '/profile'}
+              <Link href={userId ? `/organizationdashboard/profile/${userId}` : '/profile'}
               className='hidden md:block'
               >Account</Link>
             </li>

@@ -69,7 +69,7 @@ export default function EventsPage({ params }: { params: { id: string } }) {
 
             <NewEventsInfo/>
            
-             {/* Render NewEventsInfo only after loading is complete */}
+             
             
            
             

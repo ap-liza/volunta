@@ -2,8 +2,10 @@
 
 import axios from "axios"
 import { useRouter } from "next/navigation"
-import React, { useEffect, useState } from "react"
+import React, { use, useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import { FaTrash } from 'react-icons/fa';
+
 
 export default function NewEventsForm() {
 
@@ -24,6 +26,8 @@ export default function NewEventsForm() {
      fetchUserId();
  }, []);
  
+ //registration questions to ask volunteers who wants to sign up for the event
+  const [registrationQuestions, setQuestions] = useState([''])
   const [event, setEvent] = useState({
     eventTitle: '',
     eventDescription: '',
@@ -35,7 +39,9 @@ export default function NewEventsForm() {
     contact: '',
     deadline: '',
     organizerName: '',
-    userId
+    userId,
+    questions:['']
+    
     
   })
 
@@ -48,6 +54,27 @@ export default function NewEventsForm() {
       setEvent({ ...event, eventImage: file })
     }
   }
+
+  //questions for registration
+  // Adds a new empty question
+  const handleAddQuestion = () => {
+    setQuestions([...registrationQuestions, '']); 
+  };
+
+  // Remove the question at the specified index
+  const handleRemoveQuestion = (index: number) => {
+    const newQuestions = [...registrationQuestions];
+    newQuestions.splice(index, 1); 
+    setQuestions(newQuestions);
+  };
+
+  // Update the specific question
+  const handleQuestionChange = (index: number, value: string) => {
+    const newQuestions = [...registrationQuestions];
+    newQuestions[index] = value; 
+    setQuestions(newQuestions);
+  };
+
 
   const postEvent = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,12 +89,18 @@ export default function NewEventsForm() {
       formData.append('dateAndTime', event.dateAndTime)
       formData.append('eventType', event.eventType)
       formData.append('volunteerRequirements', event.volunteerRequirements)
-      formData.append('eventImage', event.eventImage as Blob) // Ensure eventImage is added as a Blob
+      formData.append('eventImage', event.eventImage as Blob) 
       formData.append('contact', event.contact)
       formData.append('deadline', event.deadline)
       formData.append('organizerName', event.organizerName)
       formData.append('userId', userId as string)
-     
+
+      const updatedEvent = { ...event, questions: registrationQuestions };
+
+     // Append questions to formData
+      updatedEvent.questions.forEach((question) => {
+      formData.append('questions[]', question);
+      });
       
 
       const response = await axios.post('/api/users/addevents/', formData, {
@@ -235,11 +268,58 @@ export default function NewEventsForm() {
           />
         </div>
 
+        {/**questions for user registration */}
+        <div className="mb-4">
+        
+          <label htmlFor=""
+            className="block text-gray-700 text-sm font-semibold mb-2"
+          >
+            Registration Questions  
+          </label>
+
+          <p className="text-[11px] my-2 text-gray"> 
+            These questions will serve as questionaires for volunteers who wants to register for this event. 
+          </p>
+
+          {registrationQuestions.map((question, index) => (
+            <div key={index} className="flex items-center mb-2 relative">
+              <input
+                type="text"
+                value={question}
+                onChange={(e) => handleQuestionChange(index, e.target.value)}
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004D40] placeholder:text-sm "
+                placeholder={`Question ${index + 1}`}
+              />
+
+            {question && (
+                
+                  <FaTrash 
+                  className="w-3 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-red-500"
+                  onClick={() => handleRemoveQuestion(index)}
+                  />
+                
+              )}
+            </div>
+
+
+            
+          ))}
+
+          <button
+            type="button"
+            onClick={handleAddQuestion}
+            className="mt-2 px-4 py-2 bg-gray-500 text-white text-[10px] font-semibold rounded-md"
+            >
+            Add Question
+          </button>
+         
+        </div>
+
         {/* Submit button */}
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="px-6 py-3 bg-[#FF6F61] text-white font-semibold rounded-md shadow hover:bg-[#C7A500] transition duration-300"
+            className="px-6 py-3 bg-[#FF6F61] text-white font-semibold rounded-md shadow hover:bg-[#C7A500] transition duration-300 disabled:cursor-not-allowed disabled:bg-gray-500"
             disabled={loading}
           >
             {loading ? 'Posting...' : 'Post Event'}

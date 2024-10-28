@@ -99,7 +99,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ event, onClose })
 
           <div className="flex items-center gap-2">
             <h2 className='font-bold'>Deadline for Registration: </h2>
-            <span>{event.deadline}</span>
+            <span>{new Date(event.deadline).toLocaleDateString()}</span>
           </div>
 
           <div className="flex items-center gap-2">

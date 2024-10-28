@@ -3,7 +3,7 @@
 
 
 import axios from "axios"
-import { useEffect, useState } from "react"
+import {  useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import DeleteUser from "@/app/components/DeleteUser"
 import { ClipLoader } from 'react-spinners';
@@ -24,15 +24,13 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
     //getting users details on rendering
       const [userId, setUserId] = useState('')
-      const [firstName, setFirstName] = useState('')
-      const [lastName, setLastName] = useState('')
-      const [username, setUserName] = useState('')
+      const [name, setName] = useState('')
+    
+      
       const [email, setEmail] = useState('')
       const [bio, setBio] = useState<string>('')
-      const [availability, setAvailability] = useState<string>('')
       const [skills, setSkills] = useState<string[]>([])
       const [interests, setInterests] = useState<string[]>([])
-      
      
 
     //profile picture state
@@ -50,8 +48,6 @@ export default function UserProfile({ params }: { params: { id: string } }) {
      // upLoading image state
      const [isLoading, setIsLoading] = useState(false);
 
-     //updating user details
-     const [loading, setLoading] = useState(false)
     // Handle file selection
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -166,16 +162,16 @@ export default function UserProfile({ params }: { params: { id: string } }) {
 
     //handle save user details
     const handleSaveBioAndSkills = async()=>{
-        setLoading(true)
+
         try {
             const updatedUser = {
-                username,
+                
                 bio,
                 skills,
                 interests
             };
     
-            const res = await axios.put(`/api/users/updateUserData/${userId}`, updatedUser);
+            const res = await axios.put(`/api/organization/updateUserData/${userId}`, updatedUser);
     
             if (res.status === 200) {
                 toast.success('Profile updated successfully');
@@ -186,9 +182,6 @@ export default function UserProfile({ params }: { params: { id: string } }) {
             console.error('Error updating profile:', error);
             toast.error('An error occurred while saving');
         }
-        finally{
-            setLoading(false)
-        }
     }
  
 
@@ -198,7 +191,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await axios.get(`/api/users/${params.id}`)
+                const res = await axios.get(`/api/organization/organizations/${params.id}`)
                 setUserData(res.data)
             } catch (error:any) {
                 console.error('Failed to fetch user data:', error.message)
@@ -210,17 +203,14 @@ export default function UserProfile({ params }: { params: { id: string } }) {
   
      const getUserData = async ()=>{
         try {
-            const res = await axios.get('/api/users/user1')
+            const res = await axios.get('/api/organization/organizations')
             console.log(res.data)
 
-            const { _id, username, firstName, lastName, email,profilePicture,bio, skills, interests, availability } = res.data.data
+            const { _id, name, email,profilePicture,bio, skills,interests } = res.data.data
             setUserId(_id)
-            setFirstName(firstName)
-            setLastName(lastName)
-            setUserName(username)
+            setName(name)
             setEmail(email)
             setBio(bio || '')
-            setAvailability(availability|| '')
             setSkills(skills || [])
             setInterests(interests || [])
 
@@ -303,7 +293,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                     <input 
                     className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
                     type="text"
-                    value={firstName}
+                    value={name}
                     disabled
                     />
                 </div>
@@ -315,7 +305,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                     <input 
                     type="text"
                     className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                    value={lastName}
+                    
                     disabled
                     />
                 </div>
@@ -335,7 +325,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                
             </div>
 
-            {/**editable username, bio and skill */}
+            {/**editable username, bio and interests */}
 
             <div className="flex flex-col md:flex-row justify-between p-4 gap-6 md:gap-4">
 
@@ -347,8 +337,8 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                     </label>
                     {isEditing ? (
                             <input
-                                value={username}
-                                onChange={(e) => setUserName(e.target.value)}
+                            
+                                
                                 className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
                                 placeholder=""
                             />
@@ -356,13 +346,13 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                             <input 
                             type="text"
                             className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                            value={username}
+                            
                             disabled
                             />
                             
                         )}
                 </div>
-                
+           
                 {/**Bio */}
                 <div className="flex flex-col gap-2">
                     <label htmlFor=""
@@ -380,41 +370,13 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                             <input 
                             type="text"
                             className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                            value={bio ? bio : 'Add Bio'}
+                            value={bio}
                             disabled
                             />
                             
                         )}
                 </div>
 
-                
-                {/**skills */}
-                <div className="flex flex-col gap-2">
-                    <label htmlFor=""
-                    className="text-gray-600"
-                    >Skills
-                    </label>
-                    {isEditing ? (
-                            <textarea
-                                value={skills.join(', ')}
-                                onChange={(e) => setSkills(e.target.value.split(', '))}
-                                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                                placeholder="Add your skills separated by comma's..."
-                            />
-                        ) : (
-                            <input 
-                            type="text"
-                            className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                            value={skills.length ? skills.join(', ') : ' Add Skills'}
-                            disabled
-                            />
-                            
-                        )}
-                </div>
-            </div>
-
-            {/**editable interest */}
-            <div className="flex flex-col md:flex-row justify-between p-4 gap-6 md:gap-4">
                 
                 {/**interests */}
                 <div className="flex flex-col gap-2">
@@ -427,7 +389,7 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                                 value={interests.join(', ')}
                                 onChange={(e) => setInterests(e.target.value.split(', '))}
                                 className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                                placeholder="Add your interests separated by comma's..."
+                                placeholder="Add your interests "
                             />
                         ) : (
                             <input 
@@ -440,32 +402,8 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                         )}
                 </div>
 
-                {/**Availability
-                <div className="flex flex-col gap-2">
-                    <label htmlFor=""
-                    className="text-gray-600"
-                    >Availability
-                    </label>
-                    {isEditing ? (
-                            <textarea
-                                value={availability}
-                                onChange={(e) => setAvailability(e.target.value)}
-                                className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                                placeholder="Weekdays or Weekends "
-                            />
-                        ) : (
-                            <input 
-                            type="text"
-                            className="py-2 px-4 bg-gray-200 rounded-lg text-gray-600"
-                            value={availability ? availability : 'Optional: Weekdays or Weekends'}
-                            disabled
-                            />
-                            
-                        )}
-                </div>
-                */}
+               
             </div>
-
 
         </div>
 
@@ -480,10 +418,9 @@ export default function UserProfile({ params }: { params: { id: string } }) {
                 {isEditing ? (
                     <button
                         onClick={handleSaveBioAndSkills}
-                        className={`px-4 py-2 mt-2 ${loading ? 'bg-gray-400 cursor-not-allowed rounded' :'bg-green-500 text-white rounded hover:bg-green-600 ' } `}
-                        disabled ={loading}
+                        className="px-4 py-2 mt-2 bg-green-500 text-white rounded hover:bg-green-600"
                     >
-                        {loading ? 'Updating....' : 'Save Changes'}
+                        Save Changes
                     </button>
                 ) : (
                     <button
