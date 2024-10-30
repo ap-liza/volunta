@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         const contact = formData.get('contact');
         const deadline = formData.get('deadline');
         const organizerName = formData.get('organizerName');
-        const questions = formData.getAll('questions')
+        const questions = formData.getAll('questions[]').filter((q) => q !== '');
         
     
 

@@ -27,7 +27,7 @@ export default function NewEventsForm() {
  }, []);
  
  //registration questions to ask volunteers who wants to sign up for the event
-  const [registrationQuestions, setQuestions] = useState([''])
+  //const [registrationQuestions, setQuestions] = useState([''])
   const [event, setEvent] = useState({
     eventTitle: '',
     eventDescription: '',
@@ -58,21 +58,29 @@ export default function NewEventsForm() {
   //questions for registration
   // Adds a new empty question
   const handleAddQuestion = () => {
-    setQuestions([...registrationQuestions, '']); 
+    setEvent((prev)=>({
+      ...prev,
+      questions: [...prev.questions, '']
+    }))
+    //setQuestions([...registrationQuestions, '']); 
   };
 
   // Remove the question at the specified index
   const handleRemoveQuestion = (index: number) => {
-    const newQuestions = [...registrationQuestions];
-    newQuestions.splice(index, 1); 
-    setQuestions(newQuestions);
+    setEvent((prevEvent) => ({
+      ...prevEvent,
+      questions: prevEvent.questions.filter((_, i) => i !== index)
+    }));
   };
 
   // Update the specific question
   const handleQuestionChange = (index: number, value: string) => {
-    const newQuestions = [...registrationQuestions];
-    newQuestions[index] = value; 
-    setQuestions(newQuestions);
+    setEvent((prevEvent) => {
+      const newQuestions = [...prevEvent.questions];
+      newQuestions[index] = value;
+      return { ...prevEvent, questions: newQuestions };
+    });
+    
   };
 
 
@@ -95,10 +103,8 @@ export default function NewEventsForm() {
       formData.append('organizerName', event.organizerName)
       formData.append('userId', userId as string)
 
-      const updatedEvent = { ...event, questions: registrationQuestions };
-
      // Append questions to formData
-      updatedEvent.questions.forEach((question) => {
+      event.questions.forEach((question) => {
       formData.append('questions[]', question);
       });
       
@@ -281,7 +287,7 @@ export default function NewEventsForm() {
             These questions will serve as questionaires for volunteers who wants to register for this event. 
           </p>
 
-          {registrationQuestions.map((question, index) => (
+          {event.questions.map((question, index) => (
             <div key={index} className="flex items-center mb-2 relative">
               <input
                 type="text"
