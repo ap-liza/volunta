@@ -49,9 +49,7 @@ export default function EditEvents() {
                 </div>
             )}
             
-            {/*<div>
-                {eventData ? <EditEventsForm event={eventData} /> : <p>Event not found.</p>}
-            </div>*/}
+           
         </DashboardLay>
     );
 }

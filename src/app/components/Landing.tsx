@@ -51,7 +51,7 @@ export default function Landing(){
         }, 5000); // Change slide every 5 seconds
     
         return () => clearInterval(interval);
-      }, []);
+      }, [testimonials.length]);
     
       const handlePrev = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);

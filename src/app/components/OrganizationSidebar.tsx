@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     //get user's details
     const [userName, setUserName] = useState('')
     const [profilePicture, setProfilePicture] = useState('')
-    
+    {/** 
     const getUserDetails = async () => {
         try {
             const res = await axios.get('/api/organization/organizations')
@@ -82,10 +82,25 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             toast.error('Failed to fetch organization details')
         }
     }
-
+*/}
     useEffect(() => {
-        getUserDetails() // Fetch user details on component mount
-    }, [])
+         // Fetch user details on component mount
+         const fetchUserDetails = async () => {
+          try {
+              const res = await axios.get('/api/organization/organizations');
+              const { _id, name } = res.data.data;
+              setUserName(name);
+              setUserId(_id);
+              setProfilePicture((profilePicture || '/profile-default.png'));
+              console.log('fetched user id', _id);
+          } catch (error: any) {
+              console.error('Failed to fetch organization details:', error.message);
+              toast.error('Failed to fetch organization details');
+          }
+      };
+
+      fetchUserDetails();
+    }, [profilePicture])
 
   // Highlight LINKS based on current path
   const pathname = usePathname();

@@ -17,6 +17,7 @@ interface EventFormData {
     deadline: string;
     organizerName: string;
     eventImage: File | null;
+    questions:string[]
 }
 
 interface EditEventFormProps {
@@ -32,6 +33,7 @@ interface EditEventFormProps {
         deadline: string;
         organizerName: string;
         eventImage: string;
+        questions: string[]
     };
 }
 
@@ -50,19 +52,22 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
         contact: event.contact,
         deadline: event.deadline,
         organizerName: event.organizerName,
-        eventImage: null
+        eventImage: null,
+        questions: event.questions
     });
 
     const [existingImageUrl, setExistingImageUrl] = useState<string>(event.eventImage);
 
 //state for when the update event button is clicked
     const [loading, setLoading] = useState(false);
+    const [questions, setQuestions] = useState<string[]>(event.questions);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, files } = e.target as HTMLInputElement;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: files ? files[0] : value
+        //[name]: files ? files[0] : value
+            [name]: files && files.length > 0 ? files[0] : value
         }));
     };
 
@@ -84,12 +89,10 @@ useEffect(() => {
     fetchUserId();
 }, []);
 
-
+ 
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-
-        // Set loading to true when submission starts
         setLoading(true);
 
         try {
@@ -112,6 +115,12 @@ useEffect(() => {
                 data.append('eventImage', existingImageUrl);
             }
 
+            // Append questions to the FormData
+            formData.questions.forEach((question, index) => {
+            data.append(`questions[${index}]`, question);
+            });
+
+
             await axios.put(`/api/users/editevents/${event._id}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -125,121 +134,10 @@ useEffect(() => {
             toast.error('Failed to update event.');
         }finally {
             setLoading(false); 
-            // Set loading to false after operation completes
         }
     };
 
-    {/** 
-    const [placeholders, setPlaceholders] = useState<EventFormData>({
-        eventTitle: '',
-        eventDescription: '',
-        location: '',
-        dateAndTime: '',
-        eventType: '',
-        volunteerRequirements: '',
-        contact: '',
-        deadline: '',
-        organizerName: '',
-        eventImage: null
-    });
 
-    const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
-
-    useEffect(() => {
-        // fetching event if event Id exists
-        if (eventId) {
-          const fetchEvent = async () => {
-            try {
-              const response = await axios.get(`/api/users/addevents/${eventId}`);
-              const event = response.data;
-                console.log(event)
-              setPlaceholders({
-                eventTitle: event.eventTitle,
-                eventDescription: event.eventDescription,
-                location: event.location,
-                dateAndTime: event.dateAndTime,
-                eventType: event.eventType,
-                volunteerRequirements: event.volunteerRequirements,
-                contact: event.contact,
-                deadline: event.deadline,
-                organizerName: event.organizerName,
-                eventImage: null //to be handled separately
-            });
-    
-              setFormData({
-                eventTitle: event.eventTitle,
-                eventDescription: event.eventDescription,
-                location: event.location,
-                dateAndTime: event.dateAndTime,
-                eventType: event.eventType,
-                volunteerRequirements: event.volunteerRequirements,
-                contact: event.contact,
-                deadline: event.deadline,
-                organizerName: event.organizerName,
-                eventImage: null
-              });
-
-               // Set existing image URL from the database
-               setExistingImageUrl(event.eventImage);
-
-            } catch (error) {
-              console.error('Error fetching event:', error);
-            }
-          };
-    
-          fetchEvent();
-        }
-      }, [eventId]);
-
-
-      const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, files } = e.target as HTMLInputElement;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: files ? files[0] : value
-        }));
-    };
-  
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        try {
-            const data = new FormData();
-
-             // Loop through each form field
-             for (const key in formData) {
-                if (formData.hasOwnProperty(key)) {
-                    const value = formData[key as keyof EventFormData];
-    
-                    // Use placeholder value if field is empty
-                    if (value === '' || value === null) {
-                        data.append(key, placeholders[key as keyof EventFormData] as string);
-                    } else {
-                        data.append(key, value as string | Blob);
-                    }
-                }
-            }
-
-        // Append existing image if no new image is uploaded
-        if (formData.eventImage === null && existingImageUrl) {
-            data.append('eventImage', existingImageUrl);
-        }
-
-
-            await axios.put(`/api/users/addevents/${eventId}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            alert('Event updated successfully!');
-        } catch (error) {
-            console.error('Error updating event:', error);
-            alert('Failed to update event.');
-        }
-    };
-
-*/}
     return (
         <div className="mx-auto p-6 rounded-lg">
             <h1 className="text-2xl font-bold mb-6 text-center">Edit Event Information</h1>
@@ -396,21 +294,24 @@ useEffect(() => {
                     />
                 </div>
 
-                {/**organizer */}
+                {/**organizerName problem commenting it out for now*/}
 
                 <div className="mb-4">
-                <label htmlFor="organizer" className="block text-gray-700 text-sm font-semibold mb-2">
+                <label htmlFor="organizerName" className="block text-gray-700 text-sm font-semibold mb-2">
                         Organizer Name
                     </label>
                     <input 
-                        name='organizer'
+                        name="organizerName"
                         value={formData.organizerName}
                         onChange={handleChange}
                         type="text"
-                        id="organizer"
+                        id="organizerName"
                         className="w-full px-3 py-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004D40]"
                     />
                 </div>
+
+               
+                
 
                {/**submit button */}
                 <div className="flex justify-center mt-6">
