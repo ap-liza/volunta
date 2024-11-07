@@ -28,6 +28,7 @@
     "next-auth": "^4.24.7",
     "next-cloudinary": "^6.11.0",
     "nodemailer": "^6.9.14",
+    "openai": "^4.71.0",
     "react": "^18",
     "react-dom": "^18",
     "react-easy-crop": "^5.0.8",

@@ -71,6 +71,12 @@ const eventSchema = new mongoose.Schema(
             default: Date.now
         }
     }] ,
+    interactions: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+        type: { type: String, enum: ['view', 'like', 'register'], default: 'view' },
+        timestamp: { type: Date, default: Date.now }
+    }],
+
     
     
 },

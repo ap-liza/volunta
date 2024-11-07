@@ -12,12 +12,12 @@ interface ActivityEventsInfoProps {
     userId: string;
 }
 
-// Client-side component to display events
+
 export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) {
 
     const [events, setEvents] = useState([]);
     
-     // Fetch events from the API when the component mounts
+     
   useEffect(() => {
     console.log("Fetching events for userId:", userId);
     
@@ -25,8 +25,7 @@ export default function ActivityEventsInfo({ userId }: ActivityEventsInfoProps) 
       try {
         const response = await axios.get(`/api/users/getevents/${userId}`);
 
-        //const id = response.data.events.event_id
-        //sort events by their time created
+        
         const sortedEvents = response.data.events.sort((a: any, b: any) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });

@@ -13,12 +13,12 @@ export default function ActivityPage({ params }: { params: { id: string } }) {
         // Simulate loading time or data fetch logic
         const fetchData = async () => {
             try {
-                // Add any data fetching logic here if needed
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate a delay
+                
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulating a delay
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
-                setLoading(false); // Set loading to false after fetch
+                setLoading(false); 
             }
         };
         fetchData();

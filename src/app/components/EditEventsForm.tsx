@@ -53,14 +53,24 @@ export default function EditEventsForm({ event }: EditEventFormProps) {
         deadline: event.deadline,
         organizerName: event.organizerName,
         eventImage: null,
-        questions: event.questions
+        questions: []
     });
 
     const [existingImageUrl, setExistingImageUrl] = useState<string>(event.eventImage);
 
 //state for when the update event button is clicked
     const [loading, setLoading] = useState(false);
-    const [questions, setQuestions] = useState<string[]>(event.questions);
+    const [questions, setQuestions] = useState<string[]>([]);
+
+    // Load initial questions from the event prop
+    useEffect(() => {
+        if (event.questions && event.questions.length > 0) {
+            setQuestions(event.questions);
+            setFormData((prevData) => ({ ...prevData, questions: event.questions }));
+        }
+
+        console.log(event.questions)
+    }, [event]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, files } = e.target as HTMLInputElement;
@@ -88,6 +98,9 @@ useEffect(() => {
 
     fetchUserId();
 }, []);
+
+
+
 
  
 
@@ -311,7 +324,26 @@ useEffect(() => {
                 </div>
 
                
-                
+                {/**questions */}
+                {questions.map((question, index) => (
+                    <div key={index} className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2">
+                            Question {index + 1}
+                        </label>
+                        <input
+                            type="text"
+                            value={question}
+                            onChange={(e) => {
+                                const updatedQuestions = [...questions];
+                                updatedQuestions[index] = e.target.value;
+                                setQuestions(updatedQuestions);
+                                setFormData((prev) => ({ ...prev, questions: updatedQuestions }));
+                            }}
+                            className="w-full px-3 py-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#004D40]"
+                        />
+                    </div>
+                ))}
+
 
                {/**submit button */}
                 <div className="flex justify-center mt-6">

@@ -92,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               setUserName(name);
               setUserId(_id);
               setProfilePicture((profilePicture || '/profile-default.png'));
-              console.log('fetched user id', _id);
+              //console.log('fetched user id', _id);
           } catch (error: any) {
               console.error('Failed to fetch organization details:', error.message);
               toast.error('Failed to fetch organization details');

@@ -56,6 +56,12 @@ export default function EventsPage({ params }: { params: { id: string } }) {
                     Upcoming Events
                 </h1>
 
+                <button className='text-[#00332E] hover:underline'>
+                    Recommended For You
+                </button>
+
+               
+{/**Initially used to create new events so will be commented out
                 <Link 
                 href={`/newevents/${userId}`}
                 className='hidden  items-center justify-center bg-gradient-to-r from-[#FF9F8B] to-[#FF6F61] text-white rounded-full w-10 h-10 shadow-lg transition duration-200 hover:from-[#D1B500] hover:to-[#C7A500]'
@@ -65,6 +71,7 @@ export default function EventsPage({ params }: { params: { id: string } }) {
                     </svg>
                     
                 </Link>
+ */}
             </div>
 
             <NewEventsInfo/>
